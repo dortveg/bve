@@ -1,0 +1,349 @@
+
+@font-face {
+  font-family: 'MajorMonoDisplay';
+  src: url(../fonts/MajorMonoDisplay-Regular.ttf);
+}
+@font-face {
+  font-family: 'SpaceMonoItl';
+  src: url(../fonts/SpaceMono-Italic.ttf);
+  font-weight: italic;
+}
+@font-face {
+  font-family: 'SpaceMonoBldItl';
+  src: url(../fonts/SpaceMono-BoldItalic.ttf);
+  font-weight: bold;
+}
+@font-face {
+  font-family: 'SpaceMono';
+  src: url(../fonts/SpaceMono-Regular.ttf);
+}
+@font-face {
+  font-family: 'AnonymousPro';
+  src: url(../fonts/AnonymousPro-Regular.ttf);
+}
+
+html {
+  background-color: #131420;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+}
+
+h1 {
+  color: #f3ecce; /*EFDDA4*/
+}
+
+h3 {
+  font-family: 'SpaceMonoItl';
+  color: #2a3347;
+  display: inline-block;
+  font-size: 95%;
+  margin-left: 1rem;
+}
+
+form {
+  text-align: center;
+  padding: .2rem;
+}
+
+button {
+  min-height: 50px;
+  width: 50px;
+  color: #131420;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 260%;
+  margin-left: 4.5rem;
+}
+
+button:hover {
+  color: #475572;
+}
+
+input[type="text"]:focus {
+  outline: none;
+}
+
+hr {
+  border: dotted #131420 5px;
+  border-bottom: none;
+  width: 40%;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+p {
+  margin: 0;
+  padding: 20px;
+  font-size: 20px;
+  color: #00204a;
+}
+
+a {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  font-size: 90%;
+}
+
+a:link, a:visited {
+  color: #131420;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:hover {
+  color: grey;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+footer {
+  background-color: #303a52;
+  text-align: center;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
+  font-family: 'SpaceMono';
+}
+
+.headBox {
+  width: 31rem;
+  margin: 3rem auto;
+  background: rgb(202, 200, 200);
+  border-radius: 5px;
+}
+
+.userBox {
+  margin: 3rem auto;
+}
+
+.inputBox {
+  width: 31rem;
+  /*margin: 3rem auto;*/
+  margin-right: 0.5rem;
+  background: #f3ecce;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.coinInput {
+  padding-left: 2rem;
+  padding-bottom: .2rem;
+  height: 60px;
+  top: 10px;
+  border: none;
+  background: transparent;
+  font-family: 'SpaceMonoItl';
+  font-size: 110%;
+  width: 313px;
+}
+
+.controlBox {
+  width: 15rem;
+  /*margin: 3rem auto;*/
+  margin-left: 0.5rem;
+  background: #f3ecce;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+.intInput {
+  padding-left: 2rem;
+  padding-bottom: .2rem;
+  height: 60px;
+  top: 10px;
+  border: none;
+  background: transparent;
+  font-family: 'SpaceMono';
+  font-size: 150%;
+  width: 3rem;
+}
+
+.switch {
+  padding-right: 1.5rem;
+  margin-left: 0rem;
+  min-height: 40px;
+  width: 40px;
+  font-size: 200%;
+}
+
+.input, .item {
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.item:last-child {
+  padding-bottom: 1rem;
+}
+
+.coinBox {
+  width: 55rem;
+  margin: .5rem auto 3rem;
+  background: #f3ecce;
+  border-radius: 5px;
+}
+/*
+.ctrlbtn {
+  margin-left: .5rem;
+  margin-right: .5rem;
+  font-size: 1.5rem;
+}
+*/
+.pair {
+  font-family: 'SpaceMonoBldItl';
+  font-size: 125%;
+  color: #2a3347;
+  min-width: 6.6rem;
+}
+
+.pairlabel {
+  margin-right: 5.5rem;
+  margin-left: 1.6rem;
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'SpaceMono';
+  font-size: 80%;
+  color: grey;
+  padding-bottom: .5rem;
+}
+
+.hr {
+  width: 70%;
+  margin-top: 1rem;
+  border: 1px solid #131420;
+  border-radius: 5px;
+}
+
+.statLabel {
+  margin-left: .5rem;
+  margin-right: .5rem;
+}
+
+.priceLabel, .volLabel {
+  margin-left: .5rem;
+  margin-right: .5rem;
+  padding-right: 1.5rem;
+}
+
+.removeLabel {
+  margin-left: .5rem;
+  margin-right: 1.5rem;
+}
+
+.price{
+  font-family: 'SpaceMono';
+  font-size: 80%;
+  color: #2a3347;
+  min-width: 4rem;
+}
+
+.priceP{
+  font-family: 'SpaceMono';
+  font-size: 80%;
+  color: #2a3347;
+  min-width: 2.5rem;
+}
+
+.vol, .pvol{
+  font-family: 'SpaceMono';
+  font-size: 80%;
+  color: #2a3347;
+  min-width: 3rem;
+}
+
+.volP{
+  font-family: 'SpaceMono';
+  font-size: 80%;
+  color: #2a3347;
+  min-width: 2rem;
+}
+
+.xBtn {
+  margin-left: 0rem;
+  font-size: 1.5rem;
+  min-height: 40px;
+  width: 40px;
+}
+
+.info {
+  text-align: center;
+  font-family: 'AnonymousPro';
+  color: grey;
+  margin-bottom: 2.5rem;
+}
+
+.about {
+  width:90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.copyright { 
+  color: grey;
+}
+
+#heading {
+  background-color: #3B3A45; /*303a52*/ /*3B3A45*/ /*353B57*/
+  text-align: center;
+  padding: 1rem;
+  margin-bottom: 4rem;
+  margin-top: 1.5rem;
+  font-family: 'MajorMonoDisplay';
+  font-size: 1.8rem;
+}
+
+#coin {
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+
+::placeholder {
+  color: grey;
+  font-family: 'AnonymousPro';
+  opacity: 1;
+  font-size: 78%;
+}
+
+
+/*
+.coinBoxMbl {
+  max-width: 37.5rem;
+  margin: 3rem auto;
+  background: rgb(202, 200, 200);
+  border-radius: 5px;
+  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+}
+
+.itemMbl {
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.itemMbl:last-child {
+  border-bottom: 0;
+}
+
+.labelsMbl {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'SpaceMono';
+  font-size: 80%;
+  color: grey;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+}
+*/

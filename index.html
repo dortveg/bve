@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Big V Energy</title>
+  <link rel="stylesheet" href="src/css/styles.css">
+  <link rel="icon" href="favicon.ico">
+</head>
+
+<body>
+  <div class="headBox" id="heading">
+    <h1>| B.V.E |</h1>
+  </div>
+
+  <div class="userBox">
+    <div class="inputBox">
+      <div class="input">
+        <input class="coinInput" type="text" name="newItem" placeholder="Coin pair. No slashes/dashes, ex. BTCUSDT" autocomplete="off">
+        <button class="add" type="submit" name="add">+</button>
+      </div>
+    </div>
+    <div class="controlBox">
+      <div class="input">
+        <h3>Interval:</h3>
+        <input class="intInput" type="text" name="interval" autocomplete="off">
+        <button class="switch" type="submit" name="switch">></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="coinBox">
+    <p class="labels">
+      <span class="pairlabel">Pair</span>
+      <span class="priceLabel">Price</span>
+      <span class="statLabel">Price %</span>
+      <span class="volLabel">Vol</span>
+      <span class="statLabel">Vol %</span>
+      <span class="removeLabel">Remove</span>
+    </p>
+    <hr class="hr">
+    <div class="item">
+      <span class="pair">BTCUSDT</span>
+      <span class="price">--</span>
+      <span class="priceP">--</span>
+      <span class="vol">--</span>
+      <span class="volP">--</span>
+      <button class="xBtn" type="submit" name="remove">X</button>
+    </div>
+  </div>
+
+  <div class="about">
+    <p class="info">This is Big Volume Energy. Track all your favorite coins from Binance for volume and price spikes. Real-time tracking along with alerts. Simple and lightweight, it can be run as a local html file in your browser. Never miss another pump or breakout again. Just type in some coin pairs above, set your desired update interval (in seconds) and get started!</p>
+  </div>
+
+  <footer>
+    <p class="copyright"><a class="link" href="mailto:dortveg@dismail.de">Email</a>< ©2021 GT ><a class="link" href="https://github.com/dortveg">GitHub</a></p>
+    <script src="src/app.js"></script>
+  </footer>
+</body>
+</html>
