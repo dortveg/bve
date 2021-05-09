@@ -69,17 +69,6 @@ let sixTS = sixDate.getTime();
 
 /////////////////////Back End///////////////////////
 
-// function getCurVol(pair) {
-//   fetch('https://api.binance.com/api/v3/klines?symbol=' + pair + '&interval=1h&startTime=' + prevTS + '&endTime=' + curTS).then(function(res) {
-//     return res.json();
-//   }).then(function(data) {
-//     let curVol = data[0][5];
-//     console.log(curVol);
-//   }).catch(function(err) {
-//     console.warn('Something went wrong.', err);
-//   });
-// };
-
 async function getCurVol(pair) {
   try {
     const res = await fetch('https://api.binance.com/api/v3/klines?symbol=' + pair + '&interval=1h&startTime=' + prevTS + '&endTime=' + curTS);
@@ -89,11 +78,6 @@ async function getCurVol(pair) {
     console.error(error);
   }
 };
-
-// async function showCurVol(pair) {
-//   let data = await getCurVol(pair);
-//   return data[0][5];
-// };
 
 function getOldVol(pair) {
   fetch('https://api.binance.com/api/v3/klines?symbol=' + pair + '&interval=1h&startTime=' + oldTS + '&endTime=' + prevTS).then(function(res) {
@@ -230,8 +214,16 @@ function displayBlankCoins() {
 }
 
 document.querySelector('.add').addEventListener('click', function() {
-  addCoin(document.querySelector('.coinInput').value);
+  let userInput = document.querySelector('.coinInput').value;
+  let pairing = userInput.toUpperCase();
+  addCoin(pairing);
   document.querySelector('.coinInput').value = '';
+});
+
+document.querySelector('.coinInput').addEventListener('keydown', function(event) {
+  if (event.key === "Enter") {
+    document.querySelector('.add').click();
+  }
 });
 
 document.querySelector('.switch').addEventListener('click', function() {
