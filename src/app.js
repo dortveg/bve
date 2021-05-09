@@ -4,7 +4,6 @@
 update element data individually
 make data return 2 decimal places
 drop down
-grey out buttons when active
 add alerts
 add notifications
 */
@@ -117,15 +116,18 @@ async function getPrice(pair) {
   }
 };
 
+let tracking = false;
 const coins = [];
 
 function startTracking() {
   //TODO
+  tracking = true;
   console.log('tracking started');
 }
 
 function stopTracking() {
   //TODO
+  tracking = false;
   console.log('tracking stopped');
 }
 
@@ -141,7 +143,7 @@ function deleteCoin(pair) {
   const shitCoin = coins.indexOf(pair);
   coins.splice(shitCoin, 1);
 
-  displayCoins();
+  displayBlankCoins();
 }
 
 async function displayCoins() {
@@ -163,7 +165,7 @@ async function displayCoins() {
     <span class="priceP">+0.5%</span>
     <span class="vol">${btcCV}</span>
     <span class="volP">3.2%</span>
-    <button class="xBtn" type="submit" name="remove">X</button>
+    <button class="xBtn disabled" type="submit" name="remove" disabled>X</button>
   </div>
   `;
 
@@ -177,19 +179,11 @@ async function displayCoins() {
         <span class="priceP">+0.3%</span>
         <span class="vol">${volume}</span>
         <span class="volP">2.7%</span>
-        <button class="xBtn" type="submit" name="remove">X</button>
+        <button class="xBtn disabled" type="submit" name="remove" disabled>X</button>
       </div>
     `;
     document.querySelector(".coinBox").insertAdjacentHTML('beforeend', html);
   });
-
-  for (let i = 0; i < document.querySelectorAll('.xBtn').length; i++) {
-    document.querySelectorAll('.xBtn')[i].addEventListener("click", function() {
-      //TODO
-      //deleteCoin();
-      console.log('deleted');
-    });
-  }
 }
 
 function displayBlankCoins() {
@@ -243,11 +237,19 @@ document.querySelector('.add').addEventListener('click', function() {
 document.querySelector('.switch').addEventListener('click', function() {
   if (document.querySelector('.switch').textContent === 'II') {
     document.querySelector('.switch').textContent = '>';
+    document.querySelector('.add').classList.remove('disabled');
+    document.querySelector('.add').disabled = false;
+    document.querySelector('h3').classList.remove('disabled');
+    document.querySelector('.coinInput').disabled = false;
 
     stopTracking();
     displayBlankCoins();
   } else {
     document.querySelector('.switch').textContent = 'II';
+    document.querySelector('.add').disabled = true;
+    document.querySelector('.add').classList.add('disabled');
+    document.querySelector('h3').classList.add('disabled');
+    document.querySelector('.coinInput').disabled = true;
 
     startTracking();
     displayCoins();

@@ -113,6 +113,14 @@ footer {
   font-family: 'SpaceMono';
 }
 
+.disabled {
+  color: grey;
+}
+
+.disabled:hover {
+  color: grey;
+}
+
 .headBox {
   width: 31rem;
   margin: 3rem auto;
