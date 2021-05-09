@@ -1,5 +1,14 @@
 // BVE
 
+/*
+update element data individually
+make data return 2 decimal places
+drop down
+grey out buttons when active
+add alerts
+add notifications
+*/
+
 ///////////Time/date stuff//////////////
 
 let date = new Date();
@@ -206,23 +215,22 @@ function displayBlankCoins() {
 
   coins.forEach(coin => {
     const html = `
-      <div class="item" id="${coin}">
+      <div class="item">
         <span class="pair">${coin}</span>
         <span id="${coin}P" class="price">--</span>
         <span class="priceP">--</span>
         <span id="${coin}V" class="vol">--</span>
         <span class="volP">--</span>
-        <button class="xBtn" type="submit" name="remove">X</button>
+        <button id="${coin}" class="xBtn" type="submit" name="remove">X</button>
       </div>
     `;
     document.querySelector(".coinBox").insertAdjacentHTML('beforeend', html);
   });
 
   for (let i = 0; i < document.querySelectorAll('.xBtn').length; i++) {
-    document.querySelectorAll('.xBtn')[i].addEventListener("click", function() {
-      //TODO
-      //deleteCoin();
-      console.log('deleted');
+    document.querySelectorAll('.xBtn')[i].addEventListener("click", function(event) {
+      const pair = event.target.id
+      deleteCoin(pair);
     });
   }
 }
