@@ -2,7 +2,6 @@
 
 /*
 update element data individually
-make data return 2 decimal places
 drop down
 add alerts
 add notifications
@@ -131,8 +130,16 @@ function deleteCoin(pair) {
 }
 
 async function displayCoins() {
-  const btcP = await getPrice('BTCUSDT');
-  const btcCV = await getCurVol('BTCUSDT');
+  const btcPData = await getPrice('BTCUSDT');
+  const btcVData = await getCurVol('BTCUSDT');
+  // const btcLongPrice = parseFloat(btcPData);
+  // const btcLongVol = parseFloat(btcVData);
+  // const btcFixedPrice = btcLongPrice.toFixed(2);
+  // const btcFixedVol = btcLongVol.toFixed(2);
+  // const btcP = btcFixedPrice.toString();
+  // const btcV = btcFixedVol.toString();
+  const btcP = btcPData.substring(0, 8);
+  const btcV = btcVData.substring(0, 8);
   document.querySelector('.coinBox').innerHTML = `
   <p class="labels">
     <span class="pairlabel">Pair</span>
@@ -147,15 +154,23 @@ async function displayCoins() {
     <span class="pair">BTCUSDT</span>
     <span class="price">${btcP}</span>
     <span class="priceP">+0.5%</span>
-    <span class="vol">${btcCV}</span>
+    <span class="vol">${btcV}</span>
     <span class="volP">3.2%</span>
     <button class="xBtn disabled" type="submit" name="remove" disabled>X</button>
   </div>
   `;
 
   coins.forEach(async(coin) => {
-    const price = await getPrice(coin);
-    const volume = await getCurVol(coin);
+    const priceData = await getPrice(coin);
+    const volData = await getCurVol(coin);
+    // const longPrice = parseFloat(priceData);
+    // const longVol = parseFloat(volData);
+    // const fixedPrice = longPrice.toFixed(2);
+    // const fixedVol = longVol.toFixed(2);
+    // const price = fixedPrice.toString();
+    // const volume = fixedVol.toString();
+    const price = priceData.substring(0, 8);
+    const volume = volData.substring(0, 8);
     const html = `
       <div class="item" id="${coin}">
         <span class="pair">${coin}</span>
