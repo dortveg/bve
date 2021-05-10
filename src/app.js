@@ -1,7 +1,6 @@
 // BVE
 
 /*
-update element data individually
 drop down
 add alerts
 add notifications
@@ -129,62 +128,6 @@ function deleteCoin(pair) {
   displayBlankCoins();
 }
 
-async function displayCoins() {
-  const btcPData = await getPrice('BTCUSDT');
-  const btcVData = await getCurVol('BTCUSDT');
-  // const btcLongPrice = parseFloat(btcPData);
-  // const btcLongVol = parseFloat(btcVData);
-  // const btcFixedPrice = btcLongPrice.toFixed(2);
-  // const btcFixedVol = btcLongVol.toFixed(2);
-  // const btcP = btcFixedPrice.toString();
-  // const btcV = btcFixedVol.toString();
-  const btcP = btcPData.substring(0, 8);
-  const btcV = btcVData.substring(0, 8);
-  document.querySelector('.coinBox').innerHTML = `
-  <p class="labels">
-    <span class="pairlabel">Pair</span>
-    <span class="priceLabel">Price</span>
-    <span class="statLabel">Price %</span>
-    <span class="volLabel">Vol</span>
-    <span class="statLabel">Vol %</span>
-    <span class="removeLabel">Remove</span>
-  </p>
-  <hr class="hr">
-  <div class="item">
-    <span class="pair">BTCUSDT</span>
-    <span class="price">${btcP}</span>
-    <span class="priceP">+0.5%</span>
-    <span class="vol">${btcV}</span>
-    <span class="volP">3.2%</span>
-    <button class="xBtn disabled" type="submit" name="remove" disabled>X</button>
-  </div>
-  `;
-
-  coins.forEach(async(coin) => {
-    const priceData = await getPrice(coin);
-    const volData = await getCurVol(coin);
-    // const longPrice = parseFloat(priceData);
-    // const longVol = parseFloat(volData);
-    // const fixedPrice = longPrice.toFixed(2);
-    // const fixedVol = longVol.toFixed(2);
-    // const price = fixedPrice.toString();
-    // const volume = fixedVol.toString();
-    const price = priceData.substring(0, 8);
-    const volume = volData.substring(0, 8);
-    const html = `
-      <div class="item" id="${coin}">
-        <span class="pair">${coin}</span>
-        <span class="price">${price}</span>
-        <span class="priceP">+0.3%</span>
-        <span class="vol">${volume}</span>
-        <span class="volP">2.7%</span>
-        <button class="xBtn disabled" type="submit" name="remove" disabled>X</button>
-      </div>
-    `;
-    document.querySelector(".coinBox").insertAdjacentHTML('beforeend', html);
-  });
-}
-
 function displayBlankCoins() {
   document.querySelector('.coinBox').innerHTML = `
   <p class="labels">
@@ -228,6 +171,24 @@ function displayBlankCoins() {
   }
 }
 
+async function displayData() {
+  const btcPData = await getPrice('BTCUSDT');
+  const btcVData = await getCurVol('BTCUSDT');
+  const btcPrice = btcPData.substring(0, 8);
+  const btcVol = btcVData.substring(0, 8);
+  document.querySelector('#btcP').innerHTML = btcPrice;
+  document.querySelector('#btcV').innerHTML = btcVol;
+
+  coins.forEach(async(coin) => {
+    const priceData = await getPrice(coin);
+    const volData = await getCurVol(coin);
+    const price = priceData.substring(0, 8);
+    const volume = volData.substring(0, 8);
+    document.querySelector(`#${coin}P`).innerHTML = price;
+    document.querySelector(`#${coin}V`).innerHTML = volume;
+  });
+}
+
 document.querySelector('.add').addEventListener('click', function() {
   let userInput = document.querySelector('.coinInput').value;
   let pairing = userInput.toUpperCase();
@@ -259,7 +220,7 @@ document.querySelector('.switch').addEventListener('click', function() {
     document.querySelector('.coinInput').disabled = true;
 
     startTracking();
-    displayCoins();
+    displayData();
   };
 });
 
