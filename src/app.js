@@ -21,6 +21,7 @@
 drop down
 add alerts
 add notifications
+make mobile friendly
 */
 
 ///////////Time/date stuff//////////////

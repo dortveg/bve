@@ -139,20 +139,12 @@ footer {
   color: grey;
 }
 
-.headBox {
-  width: 31rem;
-  margin: 3rem auto;
-  background: rgb(202, 200, 200);
-  border-radius: 5px;
-}
-
 .userBox {
   margin: 3rem auto;
 }
 
 .inputBox {
   width: 31rem;
-  /*margin: 3rem auto;*/
   margin-right: 0.5rem;
   background: #f3ecce;
   border-radius: 5px;
@@ -173,7 +165,6 @@ footer {
 
 .controlBox {
   width: 15rem;
-  /*margin: 3rem auto;*/
   margin-left: 0.5rem;
   background: #f3ecce;
   border-radius: 5px;
@@ -201,7 +192,7 @@ footer {
 }
 
 .input, .item {
-  min-height: 3rem;
+  /*min-height: 3rem;*/
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -217,13 +208,7 @@ footer {
   background: #f3ecce;
   border-radius: 5px;
 }
-/*
-.ctrlbtn {
-  margin-left: .5rem;
-  margin-right: .5rem;
-  font-size: 1.5rem;
-}
-*/
+
 .pair {
   font-family: 'SpaceMonoBldItl';
   font-size: 125%;
@@ -326,8 +311,12 @@ footer {
   padding: 1rem;
   margin-bottom: 4rem;
   margin-top: 1.5rem;
+  margin-right: auto;
+  margin-left: auto;
   font-family: 'MajorMonoDisplay';
   font-size: 1.8rem;
+  width: 31rem;
+  border-radius: 5px;
 }
 
 #coin {
@@ -342,34 +331,44 @@ footer {
   font-size: 78%;
 }
 
-
-/*
-.coinBoxMbl {
-  max-width: 37.5rem;
-  margin: 3rem auto;
-  background: rgb(202, 200, 200);
-  border-radius: 5px;
-  box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+@media (max-width: 1000px) {
+  #heading {
+    width: 65vw;
+    font-size: 3.5vw;
+  }
+  h3 {
+    font-size: 1.5vw;
+  }
+  .inputBox {
+    width: 55vw;
+  }
+  .coinInput {
+    width: 35vw;
+    font-size: 1.8vw;
+  }
+  .add {
+    font-size: 3.5vw;
+  }
+  .controlBox {
+    width: 35vw;
+  }
+  .intInput {
+    width: 6vw;
+    font-size: 2.5vw;
+  }
+  .switch {
+    font-size: 3vw;
+  }
+  .coinBox {
+    width: 98vw;
+  }
+  .labels {
+    font-size: 1.3vw;
+  }
+  .item {
+    font-size: 1.6vw;
+  }
+  .xBtn {
+    font-size: 2.6vw;
+  }
 }
-
-.itemMbl {
-  min-height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-.itemMbl:last-child {
-  border-bottom: 0;
-}
-
-.labelsMbl {
-  display: flex;
-  justify-content: space-between;
-  font-family: 'SpaceMono';
-  font-size: 80%;
-  color: grey;
-  padding-top: .5rem;
-  padding-bottom: .5rem;
-}
-*/
