@@ -169,6 +169,8 @@ footer {
   background: #f3ecce;
   border-radius: 5px;
   display: inline-block;
+  padding-top: .35rem;
+  padding-bottom: .35rem;
 }
 
 .intInput {
@@ -188,7 +190,77 @@ footer {
   margin-left: 0rem;
   min-height: 40px;
   width: 40px;
-  font-size: 200%;
+  font-size: 220%;
+}
+
+.dropBtn {
+  background-color: #131420;
+  color: #f3ecce;
+  font-size: 1.2rem;
+  border-radius: 5px;
+  margin-left: 0;
+  font-family: 'AnonymousPro';
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown:hover {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.intervals {
+  display: none;
+  position: absolute;
+  background-color: #303a52;
+  width: 100%;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding-top: .5rem;
+  padding-bottom: .5rem;
+  font-family: 'AnonymousPro';
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.intervals a {
+  color: #f3ecce;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  text-decoration: none;
+  display: block;
+  margin: 0;
+}
+
+.ihr {
+  border: 1px solid #f3ecce;
+  border-radius: 5px;
+  width: 50%;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.intervals a:hover {
+  color: grey;
+}
+
+.dropdown:hover .intervals {
+  display: block;
+}
+
+.dropdown:hover .dropBtn {
+  background-color: #303a52;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.noHover {
+  pointer-events: none;
 }
 
 .input, .item {
@@ -372,3 +444,4 @@ footer {
     font-size: 2.6vw;
   }
 }
+

@@ -42,7 +42,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
     <div class="controlBox">
       <div class="input">
         <h3>Interval:</h3>
+        <!--
         <input class="intInput" type="text" name="interval" autocomplete="off">
+        -->
+        <div class="dropdown">
+          <button class="dropBtn">--</button>
+          <div class="intervals">
+            <hr class="ihr">
+            <a id="fifteen" href="javascript:void(0)">15s</a>
+            <hr class="ihr">
+            <a id="thirty" href="javascript:void(0)">30s</a>
+            <hr class="ihr">
+            <a id="min" href="javascript:void(0)">1m</a>
+          </div>
+        </div>
         <button class="switch" type="submit" name="switch">></button>
       </div>
     </div>
@@ -60,9 +73,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
     <hr class="hr">
     <div class="item">
       <span class="pair">BTCUSDT</span>
-      <span class="price">--</span>
+      <span id="btcP" class="price">--</span>
       <span class="priceP">--</span>
-      <span class="vol">--</span>
+      <span id="btcV" class="vol">--</span>
       <span class="volP">--</span>
       <button class="xBtn" type="submit" name="remove">X</button>
     </div>
