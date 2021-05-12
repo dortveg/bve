@@ -196,9 +196,10 @@ footer {
 .dropBtn {
   background-color: #131420;
   color: #f3ecce;
-  font-size: 1.2rem;
+  font-size: 1.55rem;
   border-radius: 5px;
   margin-left: 0;
+  padding: 0px 0px 0px 2px;
   font-family: 'AnonymousPro';
 }
 

@@ -118,17 +118,18 @@ async function getPrice(pair) {
 
 let tracking = false;
 const coins = [];
+let interval;
 
-function startTracking() {
+function startTracking(int) {
   //TODO
   tracking = true;
+  document.querySelector('.xBtn').disabled = true;
+  document.querySelector('.xBtn').classList.add('disabled');
   coins.forEach(coin => {
     document.querySelector(`#${coin}`).disabled = true;
     document.querySelector(`#${coin}`).classList.add('disabled');
   });
-  document.querySelector('.xBtn').disabled = true;
-  document.querySelector('.xBtn').classList.add('disabled');
-  console.log('tracking started');
+  console.log(`tracking every ${int} seconds`);
 }
 
 function stopTracking() {
@@ -227,6 +228,7 @@ document.querySelector('.coinInput').addEventListener('keydown', function(event)
 });
 
 document.querySelector('.intervals').addEventListener('click', function(event) {
+  interval = parseInt(document.querySelector(`#${event.target.id}`).innerHTML);
   document.querySelector('.dropBtn').innerHTML = document.querySelector(`#${event.target.id}`).innerHTML;
 });
 
@@ -252,7 +254,7 @@ document.querySelector('.switch').addEventListener('click', function() {
     document.querySelector('.dropdown').classList.add('noHover');
     document.querySelector('.dropBtn').style.color = 'grey';
 
-    startTracking();
+    startTracking(interval);
     displayData();
   };
 });
