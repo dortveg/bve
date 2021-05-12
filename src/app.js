@@ -122,6 +122,12 @@ const coins = [];
 function startTracking() {
   //TODO
   tracking = true;
+  coins.forEach(coin => {
+    document.querySelector(`#${coin}`).disabled = true;
+    document.querySelector(`#${coin}`).classList.add('disabled');
+  });
+  document.querySelector('.xBtn').disabled = true;
+  document.querySelector('.xBtn').classList.add('disabled');
   console.log('tracking started');
 }
 
@@ -224,8 +230,6 @@ document.querySelector('.intervals').addEventListener('click', function(event) {
   document.querySelector('.dropBtn').innerHTML = document.querySelector(`#${event.target.id}`).innerHTML;
 });
 
-
-
 document.querySelector('.switch').addEventListener('click', function() {
   if (document.querySelector('.switch').textContent === 'II') {
     document.querySelector('.switch').textContent = '>';
@@ -236,8 +240,6 @@ document.querySelector('.switch').addEventListener('click', function() {
     document.querySelector('.dropdown').classList.remove('noHover');
     document.querySelector('.dropBtn').style.color = '#f3ecce';
     document.querySelector('.dropBtn').innerHTML = '--'
-    //document.querySelectorAll('.xBtn').disabled = false;
-    //document.querySelectorAll('.xBtn').classList.remove('disabled');
 
     stopTracking();
     displayBlankCoins();
@@ -249,8 +251,6 @@ document.querySelector('.switch').addEventListener('click', function() {
     document.querySelector('.coinInput').disabled = true;
     document.querySelector('.dropdown').classList.add('noHover');
     document.querySelector('.dropBtn').style.color = 'grey';
-    //document.querySelectorAll('.xBtn').disabled = true;
-    //document.querySelectorAll('.xBtn').classList.add('disabled');
 
     startTracking();
     displayData();
