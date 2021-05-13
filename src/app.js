@@ -18,10 +18,11 @@
 
 
 /*
-drop down
 add alerts
 add notifications
 make mobile friendly
+compare data and render diff
+error handling
 */
 
 ///////////Time/date stuff//////////////
@@ -116,25 +117,24 @@ async function getPrice(pair) {
   }
 };
 
-let tracking = false;
+let tracking;
 const coins = [];
 let interval;
 
 function startTracking(int) {
-  //TODO
-  tracking = true;
+  let ms = int * 60000;
   document.querySelector('.xBtn').disabled = true;
   document.querySelector('.xBtn').classList.add('disabled');
   coins.forEach(coin => {
     document.querySelector(`#${coin}`).disabled = true;
     document.querySelector(`#${coin}`).classList.add('disabled');
   });
-  console.log(`tracking every ${int} seconds`);
+  tracking = setInterval(displayData, ms);
+  console.log(`tracking every ${int} minutes`);
 }
 
 function stopTracking() {
-  //TODO
-  tracking = false;
+  clearInterval(tracking);
   console.log('tracking stopped');
 }
 
@@ -254,8 +254,8 @@ document.querySelector('.switch').addEventListener('click', function() {
     document.querySelector('.dropdown').classList.add('noHover');
     document.querySelector('.dropBtn').style.color = 'grey';
 
-    startTracking(interval);
     displayData();
+    startTracking(interval);
   };
 });
 
