@@ -217,8 +217,14 @@ async function displayData() {
 document.querySelector('.add').addEventListener('click', function() {
   let userInput = document.querySelector('.coinInput').value;
   let pairing = userInput.toUpperCase();
-  addCoin(pairing);
+  
   document.querySelector('.coinInput').value = '';
+
+  fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${pairing}`).then(function(res) {
+    addCoin(pairing);
+  }).catch(function(err) {
+    alert('Please enter a valid coin pairing. Make sure not to use dashes or slashes.');
+  });
 });
 
 document.querySelector('.coinInput').addEventListener('keydown', function(event) {
@@ -230,11 +236,15 @@ document.querySelector('.coinInput').addEventListener('keydown', function(event)
 document.querySelector('.intervals').addEventListener('click', function(event) {
   interval = parseInt(document.querySelector(`#${event.target.id}`).innerHTML);
   document.querySelector('.dropBtn').innerHTML = document.querySelector(`#${event.target.id}`).innerHTML;
+  document.querySelector('.switch').classList.remove('disabled');
+  document.querySelector('.switch').disabled = false;
 });
 
 document.querySelector('.switch').addEventListener('click', function() {
   if (document.querySelector('.switch').textContent === 'II') {
     document.querySelector('.switch').textContent = '>';
+    document.querySelector('.switch').classList.add('disabled');
+    document.querySelector('.switch').disabled = true;
     document.querySelector('.add').classList.remove('disabled');
     document.querySelector('.add').disabled = false;
     document.querySelector('h3').classList.remove('disabled');
@@ -258,6 +268,7 @@ document.querySelector('.switch').addEventListener('click', function() {
     startTracking(interval);
   };
 });
+
 
 
 /////////////////////////////////////////
