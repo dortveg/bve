@@ -21,8 +21,8 @@
 add alerts
 add notifications
 make mobile friendly
-compare data and render diff
-error handling
+compare data and render diff - use objects to pass data to outside async funcs; 1 func for init data, 1 intrvl func?
+error catch coin dupl
 */
 
 ///////////Time/date stuff//////////////
@@ -190,7 +190,7 @@ function displayBlankCoins() {
 
   for (let i = 0; i < document.querySelectorAll('.xBtn').length; i++) {
     document.querySelectorAll('.xBtn')[i].addEventListener("click", function(event) {
-      const pair = event.target.id
+      const pair = event.target.id;
       deleteCoin(pair);
     });
   }
