@@ -22,7 +22,6 @@ add alerts
 add notifications
 make mobile friendly
 compare data and render diff - use objects to pass data to outside async funcs; 1 func for init data, 1 intrvl func?
-error catch coin dupl
 fix delete func
 */
 
@@ -232,11 +231,15 @@ document.querySelector('.add').addEventListener('click', function() {
   
   document.querySelector('.coinInput').value = '';
 
-  fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${pairing}`).then(function(res) {
+  if (document.querySelector(`#${pairing}`)) {
+    alert('This pair was already added');
+  } else {
+    fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${pairing}`).then(function(res) {
     addCoin(pairing);
   }).catch(function(err) {
     alert('Please enter a valid coin pairing. Make sure not to use dashes or slashes.');
   });
+  }
 });
 
 document.querySelector('.coinInput').addEventListener('keydown', function(event) {
