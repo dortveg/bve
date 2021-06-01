@@ -22,7 +22,6 @@ add alerts
 add notifications
 make mobile friendly
 compare data and render diff - use objects to pass data to outside async funcs; 1 func for init data, 1 intrvl func?
-fix delete func
 */
 
 ///////////Time/date stuff//////////////
@@ -123,6 +122,7 @@ let interval;
 
 function Coin(pair) {
   this.name = pair;
+  this.index = 0;
   this.curPrice = 0;
   this.lastPrice = 0;
   this.curVol = 0;
@@ -157,14 +157,19 @@ function addCoin(pair) {
 }
 
 function deleteCoin(pair) {
-  // TODO
-  const shitCoin = coins.indexOf(pair);
+  let shitCoin;
+  coins.forEach(coin => {
+    if (coin.name === pair) {
+      shitCoin = coin.index;
+    }
+  });
   coins.splice(shitCoin, 1);
 
   displayBlankCoins();
 }
 
 function displayBlankCoins() {
+  let counter = 0;
   document.querySelector('.coinBox').innerHTML = `
   <p class="labels">
     <span class="pairlabel">Pair</span>
@@ -186,6 +191,8 @@ function displayBlankCoins() {
   `;
 
   coins.forEach(coin => {
+    coin.index = counter;
+    counter++;
     const html = `
       <div class="item">
         <span class="pair">${coin.name}</span>
