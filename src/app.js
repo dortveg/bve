@@ -20,8 +20,9 @@
 /*
 add alerts
 add notifications
+possibly more tracking settings for user? 
 make mobile friendly
-compare data and render diff - use objects to pass data to outside async funcs; 1 func for init data, 1 intrvl func?
+add volume flow
 */
 
 ///////////Time/date stuff//////////////
@@ -170,25 +171,32 @@ function deleteCoin(pair) {
 
 function displayBlankCoins() {
   let counter = 0;
-  document.querySelector('.coinBox').innerHTML = `
-  <p class="labels">
-    <span class="pairlabel">Pair</span>
-    <span class="priceLabel">Price</span>
-    <span class="statLabel">Price %</span>
-    <span class="volLabel">Vol</span>
-    <span class="statLabel">Vol %</span>
-    <span class="removeLabel">Remove</span>
-  </p>
-  <hr class="hr">
-  <div class="item">
-    <span class="pair">BTCUSDT</span>
-    <span id="btcP" class="price">--</span>
-    <span class="priceP">--</span>
-    <span id="btcV" class="vol">--</span>
-    <span class="volP">--</span>
-    <button class="xBtn" type="submit" name="remove">X</button>
-  </div>
-  `;
+  if (coins.length === 0) {
+    document.querySelector('.coinBox').innerHTML = `
+    <p class="labels">
+      <span class="pairlabel">Pair</span>
+      <span class="priceLabel">Price</span>
+      <span class="statLabel">Price %</span>
+      <span class="volLabel">Vol</span>
+      <span class="statLabel">Vol %</span>
+      <span class="removeLabel">Remove</span>
+    </p>
+    <hr class="hr">
+    <h2 class="placehold">Click the + button or press Enter to add a coin pair.</h2>
+    `;
+  } else {
+    document.querySelector('.coinBox').innerHTML = `
+    <p class="labels">
+      <span class="pairlabel">Pair</span>
+      <span class="priceLabel">Price</span>
+      <span class="statLabel">Price %</span>
+      <span class="volLabel">Vol</span>
+      <span class="statLabel">Vol %</span>
+      <span class="removeLabel">Remove</span>
+    </p>
+    <hr class="hr">
+    `;
+  };
 
   coins.forEach(coin => {
     coin.index = counter;
@@ -215,13 +223,6 @@ function displayBlankCoins() {
 }
 
 async function initData() {
-  const btcPData = await getPrice('BTCUSDT');
-  const btcVData = await getCurVol('BTCUSDT');
-  const btcPrice = btcPData.substring(0, 8);
-  const btcVol = btcVData.substring(0, 8);
-  document.querySelector('#btcP').innerHTML = btcPrice;
-  document.querySelector('#btcV').innerHTML = btcVol;
-
   coins.forEach(async(coin) => {
     const priceData = await getPrice(coin.name);
     const volData = await getCurVol(coin.name);
@@ -233,13 +234,6 @@ async function initData() {
 }
 
 async function displayData() {
-  const btcPData = await getPrice('BTCUSDT');
-  const btcVData = await getCurVol('BTCUSDT');
-  const btcPrice = btcPData.substring(0, 8);
-  const btcVol = btcVData.substring(0, 8);
-  document.querySelector('#btcP').innerHTML = btcPrice;
-  document.querySelector('#btcV').innerHTML = btcVol;
-
   coins.forEach(async(coin) => {
     coin.lastPrice = coin.curPrice;
     coin.lastVol = coin.curVol;
@@ -251,7 +245,7 @@ async function displayData() {
 
     const priceDif = (coin.lastPrice - coin.curPrice) / coin.lastPrice;
     const pDif = priceDif.toFixed(3);
-    
+
     document.querySelector(`#${coin.name}P`).innerHTML = coin.curPrice;
     document.querySelector(`#${coin.name}V`).innerHTML = coin.curVol;
     if (pDif > 0) {
