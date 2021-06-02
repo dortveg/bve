@@ -131,7 +131,7 @@ function Coin(pair) {
 }
 
 function startTracking(int) {
-  let ms = int * 60000;
+  let ms = int * 20000; //faster for testing, for now
   document.querySelector('.xBtn').disabled = true;
   document.querySelector('.xBtn').classList.add('disabled');
   coins.forEach(coin => {
@@ -197,7 +197,7 @@ function displayBlankCoins() {
       <div class="item">
         <span class="pair">${coin.name}</span>
         <span id="${coin.name}P" class="price">--</span>
-        <span class="priceP">--</span>
+        <span id="${coin.name}PP" class="priceP">--</span>
         <span id="${coin.name}V" class="vol">--</span>
         <span class="volP">--</span>
         <button id="${coin.name}" class="xBtn" type="submit" name="remove">X</button>
@@ -214,7 +214,7 @@ function displayBlankCoins() {
   }
 }
 
-async function displayData() {
+async function initData() {
   const btcPData = await getPrice('BTCUSDT');
   const btcVData = await getCurVol('BTCUSDT');
   const btcPrice = btcPData.substring(0, 8);
@@ -229,6 +229,38 @@ async function displayData() {
     coin.curVol = volData.substring(0, 8);
     document.querySelector(`#${coin.name}P`).innerHTML = coin.curPrice;
     document.querySelector(`#${coin.name}V`).innerHTML = coin.curVol;
+  });
+}
+
+async function displayData() {
+  const btcPData = await getPrice('BTCUSDT');
+  const btcVData = await getCurVol('BTCUSDT');
+  const btcPrice = btcPData.substring(0, 8);
+  const btcVol = btcVData.substring(0, 8);
+  document.querySelector('#btcP').innerHTML = btcPrice;
+  document.querySelector('#btcV').innerHTML = btcVol;
+
+  coins.forEach(async(coin) => {
+    coin.lastPrice = coin.curPrice;
+    coin.lastVol = coin.curVol;
+
+    const priceData = await getPrice(coin.name);
+    const volData = await getCurVol(coin.name);
+    coin.curPrice = priceData.substring(0, 8);
+    coin.curVol = volData.substring(0, 8);
+
+    const priceDif = (coin.lastPrice - coin.curPrice) / coin.lastPrice;
+    const pDif = priceDif.toFixed(3);
+    
+    document.querySelector(`#${coin.name}P`).innerHTML = coin.curPrice;
+    document.querySelector(`#${coin.name}V`).innerHTML = coin.curVol;
+    if (pDif > 0) {
+      document.querySelector(`#${coin.name}PP`).style.color = '#05b114';
+      document.querySelector(`#${coin.name}PP`).innerHTML = '+' + pDif + '%';
+    } else {
+      document.querySelector(`#${coin.name}PP`).style.color = '#d2121a';
+      document.querySelector(`#${coin.name}PP`).innerHTML = pDif + '%';
+    };
   });
 }
 
@@ -286,7 +318,7 @@ document.querySelector('.switch').addEventListener('click', function() {
     document.querySelector('.dropdown').classList.add('noHover');
     document.querySelector('.dropBtn').style.color = 'grey';
 
-    displayData();
+    initData();
     startTracking(interval);
   };
 });
