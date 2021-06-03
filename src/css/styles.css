@@ -32,6 +32,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. */
   font-family: 'Maki';
   src: url(../fonts/MAKISUPA.TTF);
 }
+@font-face {
+  font-family: 'DPS';
+  src: url(../fonts/DPSDbeyond.otf);
+}
+@font-face {
+  font-family: 'Sax';
+  src: url(../fonts/saxmono.ttf);
+}
 
 html {
   background: linear-gradient(157deg, rgba(19,20,32,1) 0%, rgba(29,26,45,1) 50%, rgba(19,20,32,1) 100%);
@@ -51,6 +59,13 @@ body {
 
 .disabled:hover {
   color: grey;
+}
+
+.hot {
+  background: linear-gradient(to right, #e49039 48%, #2a3347 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /*//////////////////////////////HEADER////////////////////////////////*/
@@ -140,7 +155,7 @@ button:hover {
   padding-bottom: .45rem;
 }
 
-.input, .item {
+.input{
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -289,10 +304,16 @@ p {
   margin-right: .5rem;
 }
 
-.priceLabel, .volLabel {
+.priceLabel {
+  margin-left: 0;
+  /*margin-right: .5rem;*/
+  padding-right: 1rem;
+}
+
+.volLabel {
   margin-left: .5rem;
-  margin-right: .5rem;
-  padding-right: 1.5rem;
+  /* margin-right: .5rem; */
+  padding-right: 0;
 }
 
 .removeLabel {
@@ -318,36 +339,37 @@ p {
 }
 
 .pair {
-  font-family: 'Maki';
-  font-size: 115%;
+  font-family: 'DPS';
+  font-size: 120%;
   color: #2a3347;
   min-width: 6.6rem;
+  letter-spacing: -1px;
 }
 
 .price{
-  font-family: 'Maki';
-  font-size: 90%;
+  font-family: 'Sax';
+  font-size: 95%;
   color: #2a3347;
   min-width: 4rem;
 }
 
 .priceP{
-  font-family: 'Maki';
-  font-size: 90%;
+  font-family: 'Sax';
+  font-size: 95%;
   color: #2a3347;
   min-width: 2.5rem;
 }
 
 .vol, .pvol{
-  font-family: 'Maki';
-  font-size: 90%;
+  font-family: 'Sax';
+  font-size: 95%;
   color: #2a3347;
   min-width: 3rem;
 }
 
 .volP{
-  font-family: 'Maki';
-  font-size: 90%;
+  font-family: 'Sax';
+  font-size: 95%;
   color: #2a3347;
   min-width: 2rem;
 }
@@ -359,7 +381,13 @@ p {
   width: 40px;
 }
 
-/* .item in above section */
+.item {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-weight: bold;
+}
+
 .item:last-child {
   padding-bottom: 1rem;
 }

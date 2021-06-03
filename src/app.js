@@ -177,8 +177,7 @@ function displayBlankCoins() {
       <span class="pairlabel">Pair</span>
       <span class="priceLabel">Price</span>
       <span class="statLabel">Price %</span>
-      <span class="volLabel">Vol</span>
-      <span class="statLabel">Vol %</span>
+      <span class="volLabel">CurVol/Min | AveVol/Min</span>
       <span class="removeLabel">Remove</span>
     </p>
     <hr class="hr">
@@ -190,8 +189,7 @@ function displayBlankCoins() {
       <span class="pairlabel">Pair</span>
       <span class="priceLabel">Price</span>
       <span class="statLabel">Price %</span>
-      <span class="volLabel">Vol</span>
-      <span class="statLabel">Vol %</span>
+      <span class="volLabel">CurVol/Min | AveVol/Min</span>
       <span class="removeLabel">Remove</span>
     </p>
     <hr class="hr">
@@ -206,8 +204,7 @@ function displayBlankCoins() {
         <span class="pair">${coin.name}</span>
         <span id="${coin.name}P" class="price">--</span>
         <span id="${coin.name}PP" class="priceP">--</span>
-        <span id="${coin.name}V" class="vol">--</span>
-        <span class="volP">--</span>
+        <span id="${coin.name}V" class="vol">-- | --</span>
         <button id="${coin.name}" class="xBtn" type="submit" name="remove">X</button>
       </div>
     `;
@@ -244,7 +241,9 @@ async function displayData() {
     coin.curVol = volData.substring(0, 8);
 
     const priceDif = (coin.lastPrice - coin.curPrice) / coin.lastPrice;
+    const volFlow = (coin.curVol - coin.lastVol) * 60;
     const pDif = priceDif.toFixed(3);
+    console.log(`${coin.name}: ${volFlow}/m`);
 
     document.querySelector(`#${coin.name}P`).innerHTML = coin.curPrice;
     document.querySelector(`#${coin.name}V`).innerHTML = coin.curVol;
