@@ -96,15 +96,20 @@ async function getCurVol(pair) {
   }
 };
 
-function getOldVol(pair) {
-  fetch('https://api.binance.com/api/v3/klines?symbol=' + pair + '&interval=1h&startTime=' + oldTS + '&endTime=' + prevTS).then(function(res) {
-    return res.json();
-  }).then(function(data) {
-    let oldVol = data[0][5];
-    console.log(oldVol);
-  }).catch(function(err) {
-    console.warn('Something went wrong.', err);
-  });
+async function getAveVol(pair) {
+  try {
+    const res = await fetch('https://api.binance.com/api/v3/klines?symbol=' + pair + '&interval=1h&startTime=' + sixTS + '&endTime=' + prevTS);
+    const data = await res.json();
+    // const vol1 = parseFloat(data[0][5]);
+    // const vol2 = parseFloat(data[1][5]);
+    const vol1 = parseFloat(data[2][5]);
+    const vol2 = parseFloat(data[3][5]);
+    const vol3 = parseFloat(data[4][5]);
+    const ave = ((vol1 + vol2 + vol3) / 3);
+    return ave;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 async function getPrice(pair) {
@@ -128,7 +133,7 @@ function Coin(pair) {
   this.lastPrice = 0;
   this.curVol = 0;
   this.lastVol = 0;
-  this.aveVol = 0;
+  this.aVm = 0;
 }
 
 function startTracking(int) {
@@ -225,8 +230,14 @@ async function initData() {
     const volData = await getCurVol(coin.name);
     coin.curPrice = priceData.substring(0, 8);
     coin.curVol = volData.substring(0, 8);
+
+    const aveVol = await getAveVol(coin.name);
+    const aveVolMin = aveVol / 60;
+    const aveVMin = aveVolMin.toString();
+    coin.aVm = aveVMin.substring(0, 5);
+    
     document.querySelector(`#${coin.name}P`).innerHTML = coin.curPrice;
-    document.querySelector(`#${coin.name}V`).innerHTML = coin.curVol;
+    document.querySelector(`#${coin.name}V`).innerHTML = `xxxxx/min | ${coin.aVm}/min`;
   });
 }
 
@@ -241,18 +252,19 @@ async function displayData() {
     coin.curVol = volData.substring(0, 8);
 
     const priceDif = (coin.lastPrice - coin.curPrice) / coin.lastPrice;
-    const volFlow = (coin.curVol - coin.lastVol) * 60;
+    const volFlow = (coin.curVol - coin.lastVol) * 3; //x3 for testing since faster tick
     const pDif = priceDif.toFixed(3);
-    console.log(`${coin.name}: ${volFlow}/m`);
+    const vFlow = volFlow.toString();
+    const vF = vFlow.substring(0, 5);
 
     document.querySelector(`#${coin.name}P`).innerHTML = coin.curPrice;
-    document.querySelector(`#${coin.name}V`).innerHTML = coin.curVol;
+    document.querySelector(`#${coin.name}V`).innerHTML = `${vF}/min | ${coin.aVm}/min`;
     if (pDif > 0) {
       document.querySelector(`#${coin.name}PP`).style.color = '#05b114';
-      document.querySelector(`#${coin.name}PP`).innerHTML = '+' + pDif + '%';
+      document.querySelector(`#${coin.name}PP`).innerHTML = `+${pDif}%`;
     } else {
       document.querySelector(`#${coin.name}PP`).style.color = '#d2121a';
-      document.querySelector(`#${coin.name}PP`).innerHTML = pDif + '%';
+      document.querySelector(`#${coin.name}PP`).innerHTML = `${pDif}%`;
     };
   });
 }
