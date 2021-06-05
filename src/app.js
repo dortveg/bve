@@ -22,7 +22,6 @@ add alerts
 add notifications
 possibly more tracking settings for user? 
 make mobile friendly
-add volume flow
 */
 
 ///////////Time/date stuff//////////////
@@ -125,12 +124,15 @@ async function getPrice(pair) {
 let tracking;
 const coins = [];
 let interval;
+const alertSound = new Audio('src/alert.wav');
+let sounds = true;
 
 function Coin(pair) {
   this.name = pair;
   this.index = 0;
   this.curPrice = 0;
   this.lastPrice = 0;
+  this.hrlyPrice = 0;
   this.curVol = 0;
   this.lastVol = 0;
   this.aVm = 0;
@@ -245,14 +247,23 @@ async function displayData() {
   coins.forEach(async(coin) => {
     coin.lastPrice = coin.curPrice;
     coin.lastVol = coin.curVol;
+    document.querySelector(`#${coin.name}V`).classList.remove('hot');
 
     const priceData = await getPrice(coin.name);
     const volData = await getCurVol(coin.name);
     coin.curPrice = priceData.substring(0, 8);
     coin.curVol = volData.substring(0, 8);
 
-    const priceDif = (coin.lastPrice - coin.curPrice) / coin.lastPrice;
+    const priceDif = (coin.curPrice - coin.lastPrice) / coin.lastPrice;
     const volFlow = (coin.curVol - coin.lastVol) * 3; //x3 for testing since faster tick
+
+    if ((volFlow - parseFloat(coin.aVm)) / parseFloat(coin.aVm) >= .15 && sounds === true) {
+      alertSound.play();
+      document.querySelector(`#${coin.name}V`).classList.add('hot');
+    } else if ((volFlow - parseFloat(coin.aVm)) / parseFloat(coin.aVm) >= .15 && sounds === false) {
+      document.querySelector(`#${coin.name}V`).classList.add('hot');
+    }
+
     const pDif = priceDif.toFixed(3);
     const vFlow = volFlow.toString();
     const vF = vFlow.substring(0, 5);
