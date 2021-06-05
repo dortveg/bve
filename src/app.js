@@ -19,8 +19,6 @@
 
 /*
 add notifications
-separate simultaneous prices data and vol tracking tickers
-update coin ave vols and hrly price every hour
 sound and alert % threshold settings for user
 make mobile friendly
 */
@@ -288,6 +286,16 @@ async function displayTickData() {
 }
 
 async function displayIntData() {
+  date = new Date();
+  if (date.getMinutes() === 0) {
+    coins.forEach(async(coin) => {
+      const aveVol = await getAveVol(coin.name);
+      const aveVolMin = aveVol / 60;
+      const aveVMin = aveVolMin.toString();
+      coin.aVm = aveVMin.substring(0, 5);
+    });
+  };
+
   coins.forEach(async(coin) => {
     coin.lastPrice = coin.curPrice;
     coin.lastVol = coin.curVol;
@@ -313,7 +321,7 @@ async function displayIntData() {
     const vF = vFlow.substring(0, 5);
 
     document.querySelector(`#${coin.name}V`).innerHTML = `${vF}/min | ${coin.aVm}/min`;
-    if (pDif >= 0) {
+    if (pDif > 0) {
       document.querySelector(`#${coin.name}PP`).style.color = '#05b114';
       document.querySelector(`#${coin.name}PP`).innerHTML = `+${pDif}%`;
     } else {
