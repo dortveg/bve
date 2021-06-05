@@ -25,13 +25,13 @@ make mobile friendly
 
 ///////////Time/date stuff//////////////
 
-let date = new Date();
-let year = date.getFullYear();
-let month = date.getMonth();
-let day = date.getDate();
-let hour = date.getHours();
-let min = date.getMinutes();
-let sec = date.getSeconds();
+let date;
+let year;
+let month;
+let day;
+let hour;
+let min;
+let sec;
 
 let prevHour;
 let oldHr;
@@ -41,46 +41,68 @@ let oneDay;
 let twoDay;
 let sixDay;
 
-if (day === 0) {
-  prevDay = 6;
-} else {
-  prevDay = day - 1;
-};
+let startDate;
+let prevDate;
+let oldDate;
+let sixDate;
 
-if ((hour - 6 ) < 0) {
-  sixHrs = (hour - 6) + 24;
-  sixDay = prevDay;
-} else {
-  sixHrs = hour - 6;
-  sixDay = day;
-};
+let startTS;
+let curTS;
+let prevTS;
+let oldTS;
+let sixTS;
 
-if (hour === 0) {
-  prevHour = 23;
-  oneDay = prevDay;
-} else {
-  prevHour = hour - 1;
-  oneDay = day;
-};
+function setDates() {
+  date = new Date();
+  year = date.getFullYear();
+  month = date.getMonth();
+  day = date.getDate();
+  hour = date.getHours();
+  min = date.getMinutes();
+  sec = date.getSeconds();
 
-if ((hour - 2 ) < 0) {
-  oldHr = (hour - 2) + 24;
-  twoDay = prevDay;
-} else {
-  oldHr = hour - 2;
-  twoDay = day;
-};
+  if (day === 0) {
+    prevDay = 6;
+  } else {
+    prevDay = day - 1;
+  };
 
-let startDate = new Date(year, month, day, hour, 0, sec);
-let prevDate = new Date(year, month, oneDay, prevHour, min, sec);
-let oldDate = new Date(year, month, twoDay, oldHr, 0, sec );
-let sixDate = new Date(year, month, sixDay, sixHrs, 0, sec );
+  if ((hour - 6 ) < 0) {
+    sixHrs = (hour - 6) + 24;
+    sixDay = prevDay;
+  } else {
+    sixHrs = hour - 6;
+    sixDay = day;
+  };
 
-let startTS = startDate.getTime();
-let curTS = date.getTime();
-let prevTS = prevDate.getTime();
-let oldTS = oldDate.getTime();
-let sixTS = sixDate.getTime();
+  if (hour === 0) {
+    prevHour = 23;
+    oneDay = prevDay;
+  } else {
+    prevHour = hour - 1;
+    oneDay = day;
+  };
+
+  if ((hour - 2 ) < 0) {
+    oldHr = (hour - 2) + 24;
+    twoDay = prevDay;
+  } else {
+    oldHr = hour - 2;
+    twoDay = day;
+  };
+
+  startDate = new Date(year, month, day, hour, 0, sec);
+  prevDate = new Date(year, month, oneDay, prevHour, min, sec);
+  oldDate = new Date(year, month, twoDay, oldHr, 0, sec );
+  sixDate = new Date(year, month, sixDay, sixHrs, 0, sec );
+  startTS = startDate.getTime();
+  curTS = date.getTime();
+  prevTS = prevDate.getTime();
+  oldTS = oldDate.getTime();
+  sixTS = sixDate.getTime();
+}
+
+setDates();
 
 /////////////////////Back End///////////////////////
 
@@ -260,13 +282,23 @@ async function initData() {
     const aveVolMin = aveVol / 60;
     const aveVMin = aveVolMin.toString();
     coin.aVm = aveVMin.substring(0, 5);
-    
+
     document.querySelector(`#${coin.name}P`).innerHTML = coin.curPrice;
     document.querySelector(`#${coin.name}V`).innerHTML = `xxxxx/min | ${coin.aVm}/min`;
   });
 }
 
 async function displayTickData() {
+  if (min === 0 && sec < 5) {
+    coins.forEach(async(coin) => {
+      const aveVol = await getAveVol(coin.name);
+      const aveVolMin = aveVol / 60;
+      const aveVMin = aveVolMin.toString();
+      coin.aVm = aveVMin.substring(0, 5);
+      coin.curVol = 0;
+    });
+  };
+
   coins.forEach(async(coin) => {
     const priceData = await getPrice(coin.name);
     const dayPData = await get24P(coin.name);
@@ -283,19 +315,11 @@ async function displayTickData() {
       document.querySelector(`#${coin.name}DP`).innerHTML = `${priceP}%`;
     };
   });
+
+  setDates();
 }
 
 async function displayIntData() {
-  date = new Date();
-  if (date.getMinutes() === 0) {
-    coins.forEach(async(coin) => {
-      const aveVol = await getAveVol(coin.name);
-      const aveVolMin = aveVol / 60;
-      const aveVMin = aveVolMin.toString();
-      coin.aVm = aveVMin.substring(0, 5);
-    });
-  };
-
   coins.forEach(async(coin) => {
     coin.lastPrice = coin.curPrice;
     coin.lastVol = coin.curVol;
@@ -321,6 +345,7 @@ async function displayIntData() {
     const vF = vFlow.substring(0, 5);
 
     document.querySelector(`#${coin.name}V`).innerHTML = `${vF}/min | ${coin.aVm}/min`;
+
     if (pDif > 0) {
       document.querySelector(`#${coin.name}PP`).style.color = '#05b114';
       document.querySelector(`#${coin.name}PP`).innerHTML = `+${pDif}%`;
