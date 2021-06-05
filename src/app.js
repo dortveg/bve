@@ -112,6 +112,16 @@ async function getAveVol(pair) {
   }
 };
 
+async function get24P(pair) {
+  try {
+    const res = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + pair);
+    const data = await res.json();
+    return data.priceChangePercent;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 async function getPrice(pair) {
   try {
     const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=' + pair);
@@ -123,6 +133,7 @@ async function getPrice(pair) {
 };
 
 let tracking;
+let ticker;
 const coins = [];
 let interval;
 const alertSound = new Audio('src/alert.wav');
@@ -133,27 +144,26 @@ function Coin(pair) {
   this.index = 0;
   this.curPrice = 0;
   this.lastPrice = 0;
-  this.hrlyPrice = 0;
   this.curVol = 0;
   this.lastVol = 0;
   this.aVm = 0;
 }
 
 function startTracking(int) {
-  let ms = int * 20000; //faster for testing, for now
+  let ms = int * 60000;
   document.querySelector('.xBtn').disabled = true;
   document.querySelector('.xBtn').classList.add('disabled');
   coins.forEach(coin => {
     document.querySelector(`#${coin.name}`).disabled = true;
     document.querySelector(`#${coin.name}`).classList.add('disabled');
   });
-  tracking = setInterval(displayData, ms);
-  console.log(`tracking every ${int} minutes`);
+  ticker = setInterval(displayTickData, 4000);
+  tracking = setInterval(displayIntData, ms);
 }
 
 function stopTracking() {
+  clearInterval(ticker);
   clearInterval(tracking);
-  console.log('tracking stopped');
 }
 
 ///////////////Front End//////////////////
@@ -184,7 +194,7 @@ function displayBlankCoins() {
     <p class="labels">
       <span class="pairlabel">Pair</span>
       <span class="priceLabel">Price</span>
-      <span class="statLabel">Hrly%</span>
+      <span class="statLabel">24hr%</span>
       <span class="statLabel">Intrv%</span>
       <span class="volLabel">CurVol/Min | AveVol/Min</span>
       <span class="removeLabel">Remove</span>
@@ -197,7 +207,7 @@ function displayBlankCoins() {
     <p class="labels">
       <span class="pairlabel">Pair</span>
       <span class="priceLabel">Price</span>
-      <span class="statLabel">Hrly%</span>
+      <span class="statLabel">24hr%</span>
       <span class="statLabel">Intrv%</span>
       <span class="volLabel">CurVol/Min | AveVol/Min</span>
       <span class="removeLabel">Remove</span>
@@ -213,7 +223,7 @@ function displayBlankCoins() {
       <div class="item">
         <span class="pair">${coin.name}</span>
         <span id="${coin.name}P" class="price">--</span>
-        <span id="${coin.name}HP" class="hrP">--</span>
+        <span id="${coin.name}DP" class="dP">--</span>
         <span id="${coin.name}PP" class="priceP">--</span>
         <span id="${coin.name}V" class="vol">-- | --</span>
         <button id="${coin.name}" class="xBtn" type="submit" name="remove">X</button>
@@ -236,6 +246,17 @@ async function initData() {
     const volData = await getCurVol(coin.name);
     coin.curPrice = priceData.substring(0, 8);
     coin.curVol = volData.substring(0, 8);
+    const dayPData = await get24P(coin.name);
+    const pricePNum = parseFloat(dayPData);
+    const priceP = pricePNum.toFixed(2);
+
+    if (priceP > 0) {
+      document.querySelector(`#${coin.name}DP`).style.color = '#05b114';
+      document.querySelector(`#${coin.name}DP`).innerHTML = `+${priceP}%`;
+    } else {
+      document.querySelector(`#${coin.name}DP`).style.color = '#d2121a';
+      document.querySelector(`#${coin.name}DP`).innerHTML = `${priceP}%`;
+    };
 
     const aveVol = await getAveVol(coin.name);
     const aveVolMin = aveVol / 60;
@@ -247,7 +268,26 @@ async function initData() {
   });
 }
 
-async function displayData() {
+async function displayTickData() {
+  coins.forEach(async(coin) => {
+    const priceData = await getPrice(coin.name);
+    const dayPData = await get24P(coin.name);
+    const price = priceData.substring(0, 8);
+    const pricePNum = parseFloat(dayPData);
+    const priceP = pricePNum.toFixed(2);
+    
+    document.querySelector(`#${coin.name}P`).innerHTML = price;
+    if (priceP > 0) {
+      document.querySelector(`#${coin.name}DP`).style.color = '#05b114';
+      document.querySelector(`#${coin.name}DP`).innerHTML = `+${priceP}%`;
+    } else {
+      document.querySelector(`#${coin.name}DP`).style.color = '#d2121a';
+      document.querySelector(`#${coin.name}DP`).innerHTML = `${priceP}%`;
+    };
+  });
+}
+
+async function displayIntData() {
   coins.forEach(async(coin) => {
     coin.lastPrice = coin.curPrice;
     coin.lastVol = coin.curVol;
@@ -259,7 +299,7 @@ async function displayData() {
     coin.curVol = volData.substring(0, 8);
 
     const priceDif = (coin.curPrice - coin.lastPrice) / coin.lastPrice;
-    const volFlow = (coin.curVol - coin.lastVol) * 3; //x3 for testing since faster tick
+    const volFlow = (coin.curVol - coin.lastVol);
 
     if ((volFlow - parseFloat(coin.aVm)) / parseFloat(coin.aVm) >= .25 && sounds === true) {
       alertSound.play();
@@ -268,13 +308,12 @@ async function displayData() {
       document.querySelector(`#${coin.name}V`).classList.add('hot');
     };
 
-    const pDif = priceDif.toFixed(3);
+    const pDif = (priceDif * 100).toFixed(3);
     const vFlow = volFlow.toString();
     const vF = vFlow.substring(0, 5);
 
-    document.querySelector(`#${coin.name}P`).innerHTML = coin.curPrice;
     document.querySelector(`#${coin.name}V`).innerHTML = `${vF}/min | ${coin.aVm}/min`;
-    if (pDif > 0) {
+    if (pDif >= 0) {
       document.querySelector(`#${coin.name}PP`).style.color = '#05b114';
       document.querySelector(`#${coin.name}PP`).innerHTML = `+${pDif}%`;
     } else {
