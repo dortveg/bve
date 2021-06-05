@@ -18,9 +18,10 @@
 
 
 /*
-add alerts
 add notifications
-possibly more tracking settings for user? 
+separate simultaneous prices data and vol tracking tickers
+update coin ave vols and hrly price every hour
+sound and alert % threshold settings for user
 make mobile friendly
 */
 
@@ -183,7 +184,8 @@ function displayBlankCoins() {
     <p class="labels">
       <span class="pairlabel">Pair</span>
       <span class="priceLabel">Price</span>
-      <span class="statLabel">Price %</span>
+      <span class="statLabel">Hrly%</span>
+      <span class="statLabel">Intrv%</span>
       <span class="volLabel">CurVol/Min | AveVol/Min</span>
       <span class="removeLabel">Remove</span>
     </p>
@@ -195,7 +197,8 @@ function displayBlankCoins() {
     <p class="labels">
       <span class="pairlabel">Pair</span>
       <span class="priceLabel">Price</span>
-      <span class="statLabel">Price %</span>
+      <span class="statLabel">Hrly%</span>
+      <span class="statLabel">Intrv%</span>
       <span class="volLabel">CurVol/Min | AveVol/Min</span>
       <span class="removeLabel">Remove</span>
     </p>
@@ -210,6 +213,7 @@ function displayBlankCoins() {
       <div class="item">
         <span class="pair">${coin.name}</span>
         <span id="${coin.name}P" class="price">--</span>
+        <span id="${coin.name}HP" class="hrP">--</span>
         <span id="${coin.name}PP" class="priceP">--</span>
         <span id="${coin.name}V" class="vol">-- | --</span>
         <button id="${coin.name}" class="xBtn" type="submit" name="remove">X</button>
@@ -257,12 +261,12 @@ async function displayData() {
     const priceDif = (coin.curPrice - coin.lastPrice) / coin.lastPrice;
     const volFlow = (coin.curVol - coin.lastVol) * 3; //x3 for testing since faster tick
 
-    if ((volFlow - parseFloat(coin.aVm)) / parseFloat(coin.aVm) >= .15 && sounds === true) {
+    if ((volFlow - parseFloat(coin.aVm)) / parseFloat(coin.aVm) >= .25 && sounds === true) {
       alertSound.play();
       document.querySelector(`#${coin.name}V`).classList.add('hot');
-    } else if ((volFlow - parseFloat(coin.aVm)) / parseFloat(coin.aVm) >= .15 && sounds === false) {
+    } else if ((volFlow - parseFloat(coin.aVm)) / parseFloat(coin.aVm) >= .25 && sounds === false) {
       document.querySelector(`#${coin.name}V`).classList.add('hot');
-    }
+    };
 
     const pDif = priceDif.toFixed(3);
     const vFlow = volFlow.toString();

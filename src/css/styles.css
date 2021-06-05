@@ -295,30 +295,28 @@ p {
 }
 
 .pairlabel {
-  margin-right: 5.5rem;
+  margin-right: 5rem;
   margin-left: 1.6rem;
 }
 
 .statLabel {
-  margin-left: .5rem;
+  margin-left: 1rem;
   margin-right: .5rem;
 }
 
 .priceLabel {
   margin-left: 0;
-  /*margin-right: .5rem;*/
   padding-right: 1rem;
 }
 
 .volLabel {
-  margin-left: .5rem;
-  /* margin-right: .5rem; */
+  margin-left: 1.2rem;
   padding-right: 0;
 }
 
 .removeLabel {
-  margin-left: .5rem;
-  margin-right: 1.5rem;
+  margin-left: .8rem;
+  margin-right: 1rem;
 }
 
 .hr {
@@ -342,7 +340,7 @@ p {
   font-family: 'DPS';
   font-size: 120%;
   color: #2a3347;
-  min-width: 6.6rem;
+  min-width: 6rem;
   letter-spacing: -1px;
 }
 
@@ -367,7 +365,7 @@ p {
   min-width: 3rem;
 }
 
-.volP{
+.hrP{
   font-family: 'Sax';
   font-size: 95%;
   color: #2a3347;
