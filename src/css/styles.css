@@ -126,6 +126,10 @@ h1 {
   animation-iteration-count: infinite;
 }
 
+.noClick {
+  pointer-events: none;
+}
+
 .dropdown {
   position: relative;
   display: inline-block;

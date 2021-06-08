@@ -461,6 +461,8 @@ document.querySelector('.switch').addEventListener('click', function() {
     document.querySelector('.add').classList.remove('disabled');
     document.querySelector('.add').disabled = false;
     document.querySelector('.coinInput').disabled = false;
+    document.querySelector('.intervals').classList.remove('noClick');
+    document.querySelector('.intervals').style.color = '#F7F2DE';
 
     stopTracking();
     displayBlankCoins();
@@ -469,6 +471,8 @@ document.querySelector('.switch').addEventListener('click', function() {
     document.querySelector('.add').disabled = true;
     document.querySelector('.add').classList.add('disabled');
     document.querySelector('.coinInput').disabled = true;
+    document.querySelector('.intervals').classList.add('noClick');
+    document.querySelector('.intervals').style.color = 'dimgrey';
 
     initData();
     startTracking(interval);
