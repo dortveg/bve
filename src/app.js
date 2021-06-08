@@ -18,8 +18,6 @@
 
 
 /*
-add notifications
-sound and alert % threshold settings for user
 make mobile friendly
 */
 
@@ -155,9 +153,11 @@ async function getPrice(pair) {
 let tracking;
 let ticker;
 const coins = [];
-let interval;
-const alertSound = new Audio('src/alert.wav');
+let interval = 1;
+const alertSound = new Audio('src/sound/alert.wav');
 let sounds = true;
+let alertPoint = .40;
+const notifications = [];
 
 function Coin(pair) {
   this.name = pair;
@@ -215,25 +215,29 @@ function displayBlankCoins() {
       <span class="pairlabel">Pair</span>
       <span class="priceLabel">Price</span>
       <span class="statLabel">24hr%</span>
-      <span class="statLabel">Intrv%</span>
+      <span class="statLabel">${interval}min%</span>
       <span class="volLabel">CurVol/Min | AveVol/Min</span>
       <span class="removeLabel">Remove</span>
     </p>
     <hr class="hr">
     <h2 class="placehold">Click the + button or press Enter to add a coin pair.</h2>
     `;
+    document.querySelector('.switch').classList.add('disabled');
+    document.querySelector('.switch').disabled = true;
   } else {
     document.querySelector('.coinBox').innerHTML = `
     <p class="labels">
       <span class="pairlabel">Pair</span>
       <span class="priceLabel">Price</span>
       <span class="statLabel">24hr%</span>
-      <span class="statLabel">Intrv%</span>
+      <span class="statLabel">${interval}min%</span>
       <span class="volLabel">CurVol/Min | AveVol/Min</span>
       <span class="removeLabel">Remove</span>
     </p>
     <hr class="hr">
     `;
+    document.querySelector('.switch').classList.remove('disabled');
+    document.querySelector('.switch').disabled = false;
   };
 
   coins.forEach(coin => {
@@ -280,11 +284,11 @@ async function initData() {
 
     const aveVol = await getAveVol(coin.name);
     const aveVolMin = aveVol / 60;
-    const aveVMin = aveVolMin.toString();
-    coin.aVm = aveVMin.substring(0, 5);
+    //const aveVMin = aveVolMin.toString();
+    coin.aVm = aveVolMin.toFixed();
 
     document.querySelector(`#${coin.name}P`).innerHTML = coin.curPrice;
-    document.querySelector(`#${coin.name}V`).innerHTML = `xxxxx/min | ${coin.aVm}/min`;
+    document.querySelector(`#${coin.name}V`).innerHTML = `xxxxxx/min | ${coin.aVm}/min`;
   });
 }
 
@@ -293,8 +297,8 @@ async function displayTickData() {
     coins.forEach(async(coin) => {
       const aveVol = await getAveVol(coin.name);
       const aveVolMin = aveVol / 60;
-      const aveVMin = aveVolMin.toString();
-      coin.aVm = aveVMin.substring(0, 5);
+      //const aveVMin = aveVolMin.toString();
+      coin.aVm = aveVolMin.toFixed();
       coin.curVol = 0;
     });
   };
@@ -332,17 +336,36 @@ async function displayIntData() {
 
     const priceDif = (coin.curPrice - coin.lastPrice) / coin.lastPrice;
     const volFlow = (coin.curVol - coin.lastVol);
+    const cVP = (volFlow - coin.aVm) / coin.aVm;
+    const curVP = (cVP * 100).toFixed();
+    const pDif = (priceDif * 100).toFixed(3);
+    //const vFlow = volFlow.toString();
+    const vF = volFlow.toFixed();
 
-    if ((volFlow - parseFloat(coin.aVm)) / parseFloat(coin.aVm) >= .25 && sounds === true) {
+    if (cVP >= alertPoint && sounds === true) {
       alertSound.play();
       document.querySelector(`#${coin.name}V`).classList.add('hot');
-    } else if ((volFlow - parseFloat(coin.aVm)) / parseFloat(coin.aVm) >= .25 && sounds === false) {
+      if (notifications.length >= 10) {
+        notifications.pop();
+      }
+      if (min < 10) {
+        notifications.unshift(`${coin.name} +${curVP}%v/m at $${coin.curPrice} on ${hour}:0${min}`);
+      } else {
+        notifications.unshift(`${coin.name} +${curVP}%v/m at $${coin.curPrice} on ${hour}:${min}`);
+      }
+      document.querySelector('#noteDrop').classList.add('pulsing');
+    } else if (cVP >= alertPoint && sounds === false) {
       document.querySelector(`#${coin.name}V`).classList.add('hot');
+      if (notifications.length >= 10) {
+        notifications.pop();
+      }
+      if (min < 10) {
+        notifications.unshift(`${coin.name} +${curVP}%v/m at $${coin.curPrice} on ${hour}:0${min}`);
+      } else {
+        notifications.unshift(`${coin.name} +${curVP}%v/m at $${coin.curPrice} on ${hour}:${min}`);
+      }
+      document.querySelector('#noteDrop').classList.add('pulsing');
     };
-
-    const pDif = (priceDif * 100).toFixed(3);
-    const vFlow = volFlow.toString();
-    const vF = vFlow.substring(0, 5);
 
     document.querySelector(`#${coin.name}V`).innerHTML = `${vF}/min | ${coin.aVm}/min`;
 
@@ -352,6 +375,23 @@ async function displayIntData() {
     } else {
       document.querySelector(`#${coin.name}PP`).style.color = '#d2121a';
       document.querySelector(`#${coin.name}PP`).innerHTML = `${pDif}%`;
+    };
+
+    if (notifications.length === 0) {
+      document.querySelector('.notifications').innerHTML = `
+      <hr class="shr">
+      <h4 style="color: grey;">No notifications yet.</h4>
+      `;
+    } else {
+      document.querySelector('.notifications').innerHTML = `
+      <hr class="shr">
+      `;
+      notifications.forEach(note => {
+        const html = `
+          <h4>${note}</h4>
+        `;
+        document.querySelector(".notifications").insertAdjacentHTML('beforeend', html);
+      });
     };
   });
 }
@@ -379,11 +419,38 @@ document.querySelector('.coinInput').addEventListener('keydown', function(event)
   }
 });
 
+document.querySelector('#noteDrop').addEventListener('mouseenter', function() {
+  if (document.querySelector('.pulsing')) {
+    document.querySelector('#noteDrop').classList.remove('pulsing');
+  }
+});
+
+let intOption = 'one';
 document.querySelector('.intervals').addEventListener('click', function(event) {
   interval = parseInt(document.querySelector(`#${event.target.id}`).innerHTML);
-  document.querySelector('.dropBtn').innerHTML = document.querySelector(`#${event.target.id}`).innerHTML;
-  document.querySelector('.switch').classList.remove('disabled');
-  document.querySelector('.switch').disabled = false;
+  document.querySelector(`#${intOption}`).classList.remove('selected');
+  document.querySelector(`#${event.target.id}`).classList.add('selected');
+  intOption = event.target.id;
+});
+
+let alertOption = 'forty';
+document.querySelector('.alertP').addEventListener('click', function(event) {
+  alertPoint = parseFloat(document.querySelector(`#${event.target.id}`).innerHTML) / 100;
+  document.querySelector(`#${alertOption}`).classList.remove('selected');
+  document.querySelector(`#${event.target.id}`).classList.add('selected');
+  alertOption = event.target.id;
+});
+
+let soundOption = 'soundon';
+document.querySelector('.alertS').addEventListener('click', function(event) {
+  if (event.target.id === 'soundon') {
+    sounds = true;
+  } else if (event.target.id ==='soundoff') {
+    sounds = false;
+  };
+  document.querySelector(`#${soundOption}`).classList.remove('selected');
+  document.querySelector(`#${event.target.id}`).classList.add('selected');
+  soundOption = event.target.id;
 });
 
 document.querySelector('.switch').addEventListener('click', function() {
@@ -393,11 +460,7 @@ document.querySelector('.switch').addEventListener('click', function() {
     document.querySelector('.switch').disabled = true;
     document.querySelector('.add').classList.remove('disabled');
     document.querySelector('.add').disabled = false;
-    document.querySelector('h3').classList.remove('disabled');
     document.querySelector('.coinInput').disabled = false;
-    document.querySelector('.dropdown').classList.remove('noHover');
-    document.querySelector('.dropBtn').style.color = '#f3ecce';
-    document.querySelector('.dropBtn').innerHTML = '--'
 
     stopTracking();
     displayBlankCoins();
@@ -405,10 +468,7 @@ document.querySelector('.switch').addEventListener('click', function() {
     document.querySelector('.switch').textContent = 'II';
     document.querySelector('.add').disabled = true;
     document.querySelector('.add').classList.add('disabled');
-    document.querySelector('h3').classList.add('disabled');
     document.querySelector('.coinInput').disabled = true;
-    document.querySelector('.dropdown').classList.add('noHover');
-    document.querySelector('.dropBtn').style.color = 'grey';
 
     initData();
     startTracking(interval);

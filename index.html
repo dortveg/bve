@@ -32,29 +32,34 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
     <h1> BVE </h1>
   </div>
 
-  <div class="userBox">
-    <div class="inputBox">
-      <div class="input">
-        <input class="coinInput" type="text" name="newItem" placeholder="Coin pair. No slashes/dashes, ex. BTCUSDT" autocomplete="off">
-        <button class="add" type="submit" name="add">+</button>
+  <div class="userDash">
+    <div id="noteDrop" class="dropdown">
+      <button class="dropBtn"><img class="icon" src="src/icons/notes.svg"/></button>
+      <div class="notifications">
+        <hr class="shr">
+        <h4 style="color: grey;">No notifications yet.</h4>
       </div>
     </div>
-    <div class="controlBox">
-      <div class="input">
-        <h3>Interval:</h3>
-        <div class="dropdown">
-          <button class="dropBtn">--</button>
-          <div class="intervals">
-            <hr class="ihr">
-            <a id="one" href="javascript:void(0)">1m</a>
-            <hr class="ihr">
-            <a id="five" href="javascript:void(0)">5m</a>
-            <hr class="ihr">
-            <a id="fif" href="javascript:void(0)">15m</a>
-          </div>
-        </div>
-        <button class="switch disabled" type="submit" name="switch" disabled>></button>
+    <div class="dropdown">
+      <button class="dropBtn"><img class="icon" src="src/icons/options.svg"/></button>
+      <div class="options">
+        <hr class="shr">
+        <span class="option intervals">Interval: <a id="one" class="selected" style="margin-left: .5rem;" href="javascript:void(0)">1m</a><a id="five" style="margin-left: 1rem;" href="javascript:void(0)">5m</a><a id="fif" style="margin-left: 1rem;" href="javascript:void(0)">15m</a></span>
+        <hr class="ihr">
+        <span class="option alertP">Alert point: <a id="thirty" style="margin-left: .5rem;" href="javascript:void(0)">30%</a><a id="forty" class="selected"
+          style="margin-left: 1rem;" href="javascript:void(0)">40%</a><a id="fifty" style="margin-left: 1rem;" href="javascript:void(0)">50%</a></span>
+        <hr class="ihr">
+        <span class="option alertS">Alert sound: <a id="soundon" class="selected"
+          style="margin-left: .5rem;" href="javascript:void(0)">On</a><a id="soundoff" style="margin-left: 1rem;" href="javascript:void(0)">Off</a></span>
       </div>
+    </div>
+  </div>
+
+  <div class="inputBox">
+    <div class="input">
+      <input class="coinInput" type="text" name="newItem" placeholder="Coin pair. No slashes/dashes, ex. BTCUSDT" autocomplete="off">
+      <button class="add" type="submit" name="add">+</button>
+      <button class="switch disabled" type="submit" name="switch" disabled>></button>
     </div>
   </div>
 
@@ -72,7 +77,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
   </div>
 
   <div class="about">
-    <p class="info">This is Big Volume Energy. Track all your favorite coins from Binance for volume and price spikes. Real-time tracking along with alerts. Simple, lightweight, and it can be run as a local file in your browser. Never miss another pump or breakout again. Just type in some coin pairs above, set your desired update interval and get started!</p>
+    <p class="info">This is Big Volume Energy. Track all your favorite coins from Binance for volume and price spikes. Real-time tracking along with alerts. Simple, lightweight, and it can be run as a local file in your browser. Never miss another pump or breakout again. Just type in some coin pairs above and get started! Use the option menu on the top left to adjust alerts and your desired update interval.</p>
   </div>
 
   <footer>
