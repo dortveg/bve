@@ -44,6 +44,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>. */
 html {
   background: linear-gradient(157deg, rgba(19,20,32,1) 0%, rgba(29,26,45,1) 50%, rgba(19,20,32,1) 100%);
   height: 100%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 body {
@@ -136,7 +138,6 @@ h1 {
 }
 
 .dropBtn {
-  background-color: #131420;
   color: #f3ecce;
   font-size: 1.45rem;
   border-radius: 5px;
