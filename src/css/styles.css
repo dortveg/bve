@@ -78,7 +78,7 @@ body {
   margin-bottom: 2rem;
   margin-right: auto;
   margin-left: auto;
-  width: 26rem;
+  /* width: 26rem; */
   border-radius: 5px;
 }
 
@@ -493,19 +493,25 @@ footer {
   text-decoration: none;
 }
 
-
 /* /////////////////MOBILE//////////////// */
 
 @media (max-width: 1000px) {
-  #heading {
-    width: 65vw;
-    font-size: 3.5vw;
+  body {
+    grid-template-rows: auto auto 1fr auto;
   }
-  h3 {
-    font-size: 1.5vw;
+  #heading {
+    position: fixed;
+    top: 0%;
+    right: 1%;
+  }
+  .userDash {
+    top: 1%;
+  }
+  h1 {
+    font-size: 7vw;
   }
   .inputBox {
-    width: 55vw;
+    margin-top: 9rem;
   }
   .coinInput {
     width: 35vw;
