@@ -78,7 +78,6 @@ body {
   margin-bottom: 2rem;
   margin-right: auto;
   margin-left: auto;
-  /* width: 26rem; */
   border-radius: 5px;
 }
 
@@ -166,7 +165,6 @@ hr {
   padding-top: 0;
   padding-bottom: 1rem;
   font-family: 'Typori';
-  /*text-align: center;*/
   font-size: 1.15rem;
 }
 
@@ -174,7 +172,6 @@ hr {
   color: dimgrey;
   margin-left: .5rem;
   text-decoration: none;
-  /*display: block;*/
   margin: 0;
 }
 
@@ -191,7 +188,6 @@ hr {
   padding-top: 0;
   padding-bottom: .5rem;
   font-family: 'Typori';
-  /*text-align: center;*/
   font-size: 1.15rem;
 }
 

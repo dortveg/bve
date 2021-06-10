@@ -19,6 +19,8 @@
 
 /*
 make mobile friendly
+5 a row (1) or 2 a row (5) alerts, or adjustable; take out 15??; use array and add 'yes' or 'no' on every tick to check
+create individual dropdowns within main drop for individual notifications, create at coin add
 */
 
 ///////////Time/date stuff//////////////
@@ -154,9 +156,9 @@ let tracking;
 let ticker;
 const coins = [];
 let interval = 1;
-const alertSound = new Audio('src/sound/alert.wav');
+const alertSound = new Audio('src/sound/boop.wav');
 let sounds = true;
-let alertPoint = .40;
+let alertPoint = 1.0;
 const notifications = [];
 
 function Coin(pair) {
@@ -284,7 +286,6 @@ async function initData() {
 
     const aveVol = await getAveVol(coin.name);
     const aveVolMin = aveVol / 60;
-    //const aveVMin = aveVolMin.toString();
     coin.aVm = aveVolMin.toFixed();
 
     document.querySelector(`#${coin.name}P`).innerHTML = coin.curPrice;
@@ -297,7 +298,6 @@ async function displayTickData() {
     coins.forEach(async(coin) => {
       const aveVol = await getAveVol(coin.name);
       const aveVolMin = aveVol / 60;
-      //const aveVMin = aveVolMin.toString();
       coin.aVm = aveVolMin.toFixed();
       coin.curVol = 0;
     });
@@ -339,7 +339,6 @@ async function displayIntData() {
     const cVP = (volFlow - coin.aVm) / coin.aVm;
     const curVP = (cVP * 100).toFixed();
     const pDif = (priceDif * 100).toFixed(3);
-    //const vFlow = volFlow.toString();
     const vF = volFlow.toFixed();
 
     if (cVP >= alertPoint && sounds === true) {
@@ -433,7 +432,7 @@ document.querySelector('.intervals').addEventListener('click', function(event) {
   intOption = event.target.id;
 });
 
-let alertOption = 'forty';
+let alertOption = 'dbl';
 document.querySelector('.alertP').addEventListener('click', function(event) {
   alertPoint = parseFloat(document.querySelector(`#${event.target.id}`).innerHTML) / 100;
   document.querySelector(`#${alertOption}`).classList.remove('selected');
@@ -478,13 +477,3 @@ document.querySelector('.switch').addEventListener('click', function() {
     startTracking(interval);
   };
 });
-
-
-
-/////////////////////////////////////////
-
-
-
-
-
-
