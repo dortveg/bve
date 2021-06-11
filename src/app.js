@@ -351,15 +351,15 @@ async function displayIntData() {
 
     if (cVP < alertPoint) {
       if (interval === 1) {
-        coin.oneTicks.push('n');
+        coin.oneTicks.push(0);
 
-        if (coin.oneTicks.length > 5) {
+        if (coin.oneTicks.length > 10) {
           coin.oneTicks.shift();
         }
       } else if (interval === 5) {
-        coin.fiveTicks.push('n');
+        coin.fiveTicks.push(0);
 
-        if (coin.fiveTicks.length > 2) {
+        if (coin.fiveTicks.length > 3) {
           coin.fiveTicks.shift();
         }
       }
@@ -370,23 +370,25 @@ async function displayIntData() {
       document.querySelector(`#${coin.name}V`).classList.add('hot');
 
       if (interval === 1) {
-        coin.oneTicks.push('y');
+        coin.oneTicks.push(1);
 
-        if (coin.oneTicks.length > 5) {
+        if (coin.oneTicks.length > 10) {
           coin.oneTicks.shift();
+          const total = coin.oneTicks.reduce((a, b) => a + b, 0);
 
-          if (!coin.oneTicks.includes('n')) {
+          if (total >= 7) {
             document.querySelector(`#${coin.name}N`).classList.add('hot');
             hotSound.play();
           }
         }
       } else if (interval === 5) {
-        coin.fiveTicks.push('y');
+        coin.fiveTicks.push(1);
 
-        if (coin.fiveTicks.length > 2) {
+        if (coin.fiveTicks.length > 3) {
           coin.fiveTicks.shift();
+          const total = coin.fiveTicks.reduce((a, b) => a + b, 0);
 
-          if (!coin.fiveTicks.includes('n')) {
+          if (total >= 2) {
             document.querySelector(`#${coin.name}N`).classList.add('hot');
             hotSound.play();
           }
@@ -409,22 +411,24 @@ async function displayIntData() {
       document.querySelector(`#${coin.name}V`).classList.add('hot');
 
       if (interval === 1) {
-        coin.oneTicks.push('y');
+        coin.oneTicks.push(1);
 
-        if (coin.oneTicks.length > 5) {
+        if (coin.oneTicks.length > 10) {
           coin.oneTicks.shift();
+          const total = coin.oneTicks.reduce((a, b) => a + b, 0);
 
-          if (!coin.oneTicks.includes('n')) {
+          if (total >= 7) {
             document.querySelector(`#${coin.name}N`).classList.add('hot');
           }
         }
       } else if (interval === 5) {
-        coin.fiveTicks.push('y');
+        coin.fiveTicks.push(1);
 
-        if (coin.fiveTicks.length > 2) {
+        if (coin.fiveTicks.length > 3) {
           coin.fiveTicks.shift();
+          const total = coin.fiveTicks.reduce((a, b) => a + b, 0);
 
-          if (!coin.fiveTicks.includes('n')) {
+          if (total >= 2) {
             document.querySelector(`#${coin.name}N`).classList.add('hot');
           }
         }
