@@ -19,7 +19,6 @@
 
 /*
 make mobile friendly
-5 a row (1) or 2 a row (5) alerts, or adjustable; take out 15??; use array and add 'yes' or 'no' on every tick to check
 create individual dropdowns within main drop for individual notifications, create at coin add
 */
 
@@ -157,6 +156,7 @@ let ticker;
 const coins = [];
 let interval = 1;
 const alertSound = new Audio('src/sound/boop.wav');
+const hotSound = new Audio('src/sound/alert.wav');
 let sounds = true;
 let alertPoint = 1.0;
 const notifications = [];
@@ -169,6 +169,8 @@ function Coin(pair) {
   this.curVol = 0;
   this.lastVol = 0;
   this.aVm = 0;
+  this.oneTicks = [];
+  this.fiveTicks = [];
 }
 
 function startTracking(int) {
@@ -247,7 +249,7 @@ function displayBlankCoins() {
     counter++;
     const html = `
       <div class="item">
-        <span class="pair">${coin.name}</span>
+        <span id="${coin.name}N" class="pair">${coin.name}</span>
         <span id="${coin.name}P" class="price">--</span>
         <span id="${coin.name}DP" class="dP">--</span>
         <span id="${coin.name}PP" class="priceP">--</span>
@@ -327,7 +329,13 @@ async function displayIntData() {
   coins.forEach(async(coin) => {
     coin.lastPrice = coin.curPrice;
     coin.lastVol = coin.curVol;
-    document.querySelector(`#${coin.name}V`).classList.remove('hot');
+
+    if (document.querySelector(`#${coin.name}V`).classList.contains('hot')) {
+      document.querySelector(`#${coin.name}V`).classList.remove('hot');
+    }
+    if (document.querySelector(`#${coin.name}N`).classList.contains('hot')) {
+      document.querySelector(`#${coin.name}N`).classList.remove('hot');
+    }
 
     const priceData = await getPrice(coin.name);
     const volData = await getCurVol(coin.name);
@@ -341,9 +349,42 @@ async function displayIntData() {
     const pDif = (priceDif * 100).toFixed(3);
     const vF = volFlow.toFixed();
 
+    if (cVP < alertPoint) {
+      if (interval === 1) {
+        coin.oneTicks.push('n');
+        if (coin.oneTicks.length > 5) {
+          coin.oneTicks.shift();
+        }
+      } else if (interval === 5) {
+        coin.fiveTicks.push('n');
+        if (coin.fiveTicks.length > 2) {
+          coin.fiveTicks.shift();
+        }
+      }
+    }
+
     if (cVP >= alertPoint && sounds === true) {
       alertSound.play();
       document.querySelector(`#${coin.name}V`).classList.add('hot');
+      if (interval === 1) {
+        coin.oneTicks.push('y');
+        if (coin.oneTicks.length > 5) {
+          coin.oneTicks.shift();
+          if (!coin.oneTicks.includes('n')) {
+            document.querySelector(`#${coin.name}N`).classList.add('hot');
+            hotSound.play();
+          }
+        }
+      } else if (interval === 5) {
+        coin.fiveTicks.push('y');
+        if (coin.fiveTicks.length > 2) {
+          coin.fiveTicks.shift();
+          if (!coin.fiveTicks.includes('n')) {
+            document.querySelector(`#${coin.name}N`).classList.add('hot');
+            hotSound.play();
+          }
+        }
+      }
       if (notifications.length >= 10) {
         notifications.pop();
       }
@@ -355,6 +396,23 @@ async function displayIntData() {
       document.querySelector('#noteDrop').classList.add('pulsing');
     } else if (cVP >= alertPoint && sounds === false) {
       document.querySelector(`#${coin.name}V`).classList.add('hot');
+      if (interval === 1) {
+        coin.oneTicks.push('y');
+        if (coin.oneTicks.length > 5) {
+          coin.oneTicks.shift();
+          if (!coin.oneTicks.includes('n')) {
+            document.querySelector(`#${coin.name}N`).classList.add('hot');
+          }
+        }
+      } else if (interval === 5) {
+        coin.fiveTicks.push('y');
+        if (coin.fiveTicks.length > 2) {
+          coin.fiveTicks.shift();
+          if (!coin.fiveTicks.includes('n')) {
+            document.querySelector(`#${coin.name}N`).classList.add('hot');
+          }
+        }
+      }
       if (notifications.length >= 10) {
         notifications.pop();
       }
