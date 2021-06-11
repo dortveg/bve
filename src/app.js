@@ -313,6 +313,7 @@ async function displayTickData() {
     const priceP = pricePNum.toFixed(2);
     
     document.querySelector(`#${coin.name}P`).innerHTML = price;
+
     if (priceP > 0) {
       document.querySelector(`#${coin.name}DP`).style.color = '#05b114';
       document.querySelector(`#${coin.name}DP`).innerHTML = `+${priceP}%`;
@@ -341,7 +342,6 @@ async function displayIntData() {
     const volData = await getCurVol(coin.name);
     coin.curPrice = priceData.substring(0, 8);
     coin.curVol = volData.substring(0, 8);
-
     const priceDif = (coin.curPrice - coin.lastPrice) / coin.lastPrice;
     const volFlow = (coin.curVol - coin.lastVol);
     const cVP = (volFlow - coin.aVm) / coin.aVm;
@@ -352,11 +352,13 @@ async function displayIntData() {
     if (cVP < alertPoint) {
       if (interval === 1) {
         coin.oneTicks.push('n');
+
         if (coin.oneTicks.length > 5) {
           coin.oneTicks.shift();
         }
       } else if (interval === 5) {
         coin.fiveTicks.push('n');
+
         if (coin.fiveTicks.length > 2) {
           coin.fiveTicks.shift();
         }
@@ -366,10 +368,13 @@ async function displayIntData() {
     if (cVP >= alertPoint && sounds === true) {
       alertSound.play();
       document.querySelector(`#${coin.name}V`).classList.add('hot');
+
       if (interval === 1) {
         coin.oneTicks.push('y');
+
         if (coin.oneTicks.length > 5) {
           coin.oneTicks.shift();
+
           if (!coin.oneTicks.includes('n')) {
             document.querySelector(`#${coin.name}N`).classList.add('hot');
             hotSound.play();
@@ -377,51 +382,66 @@ async function displayIntData() {
         }
       } else if (interval === 5) {
         coin.fiveTicks.push('y');
+
         if (coin.fiveTicks.length > 2) {
           coin.fiveTicks.shift();
+
           if (!coin.fiveTicks.includes('n')) {
             document.querySelector(`#${coin.name}N`).classList.add('hot');
             hotSound.play();
           }
         }
       }
+
       if (notifications.length >= 10) {
         notifications.pop();
       }
+
       if (min < 10) {
         notifications.unshift(`${coin.name} +${curVP}%v/m at $${coin.curPrice} on ${hour}:0${min}`);
       } else {
         notifications.unshift(`${coin.name} +${curVP}%v/m at $${coin.curPrice} on ${hour}:${min}`);
       }
+
       document.querySelector('#noteDrop').classList.add('pulsing');
+
     } else if (cVP >= alertPoint && sounds === false) {
       document.querySelector(`#${coin.name}V`).classList.add('hot');
+
       if (interval === 1) {
         coin.oneTicks.push('y');
+
         if (coin.oneTicks.length > 5) {
           coin.oneTicks.shift();
+
           if (!coin.oneTicks.includes('n')) {
             document.querySelector(`#${coin.name}N`).classList.add('hot');
           }
         }
       } else if (interval === 5) {
         coin.fiveTicks.push('y');
+
         if (coin.fiveTicks.length > 2) {
           coin.fiveTicks.shift();
+
           if (!coin.fiveTicks.includes('n')) {
             document.querySelector(`#${coin.name}N`).classList.add('hot');
           }
         }
       }
+
       if (notifications.length >= 10) {
         notifications.pop();
       }
+
       if (min < 10) {
         notifications.unshift(`${coin.name} +${curVP}%v/m at $${coin.curPrice} on ${hour}:0${min}`);
       } else {
         notifications.unshift(`${coin.name} +${curVP}%v/m at $${coin.curPrice} on ${hour}:${min}`);
       }
+
       document.querySelector('#noteDrop').classList.add('pulsing');
+
     };
 
     document.querySelector(`#${coin.name}V`).innerHTML = `${vF}/min | ${coin.aVm}/min`;
@@ -443,6 +463,7 @@ async function displayIntData() {
       document.querySelector('.notifications').innerHTML = `
       <hr class="shr">
       `;
+
       notifications.forEach(note => {
         const html = `
           <h4>${note}</h4>
