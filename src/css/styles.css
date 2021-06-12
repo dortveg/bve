@@ -144,6 +144,22 @@ h1 {
   padding: 0px 0px 0px 2px;
 }
 
+.expandbl {
+  position: relative;
+  display: inline-block;
+}
+
+.expBtn {
+  color: #f3ecce;
+  font-size: 1.15rem;
+  font-family: 'Typori';
+  font-weight: bold;
+  margin-left: 0;
+  padding: 0px 0px 0px 2px;
+  width: 7rem;
+  min-height: 2rem;
+}
+
 hr {
   border: dotted #131420 5px;
   border-bottom: none;
@@ -179,7 +195,7 @@ hr {
   display: none;
   position: absolute;
   background-color: #303a52;
-  width: 21rem;
+  width: 7rem;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
   border-bottom-left-radius: 5px;
@@ -187,8 +203,43 @@ hr {
   border-top-right-radius: 5px;
   padding-top: 0;
   padding-bottom: .5rem;
+  /* font-family: 'Typori';
+  font-size: 1.15rem; */
+}
+
+.phold {
+  color: grey;
+  text-align: center;
+  margin-left: 0;
   font-family: 'Typori';
-  font-size: 1.15rem;
+}
+
+.logs {
+  display: none;
+  position: absolute;
+  background-color: #303a52;
+  width: 24rem;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  padding-top: 0;
+  padding-bottom: .5rem;
+  margin-left: .2rem;
+  margin-top: -1.65rem;
+  font-family: 'Sax';
+  /* font-size: 1.15rem; */
+}
+
+.logLbl {
+  text-align: center;
+  color:#f3ecce;
+  margin-top: .5rem;
+  margin-bottom: .5rem;
+  font-family: 'Typori';
+  font-size: 1.1rem;
 }
 
 a {
@@ -245,6 +296,10 @@ a:hover {
 
 .dropdown:hover .options {
   display: block;
+}
+
+.expandbl:hover .logs {
+  display: inline-block;
 }
 
 .dropdown:hover .notifications{

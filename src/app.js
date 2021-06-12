@@ -19,7 +19,6 @@
 
 /*
 make mobile friendly
-create individual dropdowns within main drop for individual notifications, create at coin add
 */
 
 ///////////Time/date stuff//////////////
@@ -159,7 +158,6 @@ const alertSound = new Audio('src/sound/boop.wav');
 const hotSound = new Audio('src/sound/alert.wav');
 let sounds = true;
 let alertPoint = 1.0;
-const notifications = [];
 
 function Coin(pair) {
   this.name = pair;
@@ -171,6 +169,7 @@ function Coin(pair) {
   this.aVm = 0;
   this.oneTicks = [];
   this.fiveTicks = [];
+  this.logs = [];
 }
 
 function startTracking(int) {
@@ -214,6 +213,10 @@ function deleteCoin(pair) {
 function displayBlankCoins() {
   let counter = 0;
   if (coins.length === 0) {
+    document.querySelector('.notifications').innerHTML = `
+    <hr class="shr">
+    <h4 class="phold">Add some coin pairs!</h4>
+    `;
     document.querySelector('.coinBox').innerHTML = `
     <p class="labels">
       <span class="pairlabel">Pair</span>
@@ -229,6 +232,9 @@ function displayBlankCoins() {
     document.querySelector('.switch').classList.add('disabled');
     document.querySelector('.switch').disabled = true;
   } else {
+    document.querySelector('.notifications').innerHTML = `
+    <hr class="shr">
+    `;
     document.querySelector('.coinBox').innerHTML = `
     <p class="labels">
       <span class="pairlabel">Pair</span>
@@ -247,7 +253,32 @@ function displayBlankCoins() {
   coins.forEach(coin => {
     coin.index = counter;
     counter++;
-    const html = `
+
+    let logHtml;
+    if (coin.logs.length === 0) {
+      logHtml = `
+      <div class="expandbl">
+        <button id="${coin.name}X" class="expBtn">${coin.name}</button>
+        <div id="${coin.name}L" class="logs">
+          <h3 class="logLbl">${coin.name}</h3>
+          <hr class="shr">
+          <h4 style="text-align: center;">No events logged yet.</h4>
+        </div>
+      </div>
+      `;
+    } else {
+      logHtml = `
+      <div class="expandbl">
+        <button id="${coin.name}X" class="expBtn">${coin.name}</button>
+        <div id="${coin.name}L" class="logs">
+          <h3 class="logLbl">${coin.name}</h3>
+          <hr class="shr">
+        </div>
+      </div>
+      `;
+    }
+
+    const coinHtml = `
       <div class="item">
         <span id="${coin.name}N" class="pair">${coin.name}</span>
         <span id="${coin.name}P" class="price">--</span>
@@ -257,13 +288,33 @@ function displayBlankCoins() {
         <button id="${coin.name}" class="xBtn" type="submit" name="remove">X</button>
       </div>
     `;
-    document.querySelector(".coinBox").insertAdjacentHTML('beforeend', html);
+
+    document.querySelector(".coinBox").insertAdjacentHTML('beforeend', coinHtml);
+    document.querySelector(".notifications").insertAdjacentHTML('beforeend', logHtml);
+
+    if (coin.logs.length > 0) {
+      coin.logs.forEach(log => {
+        const html = `
+        <h4>${log}</h4>
+        `;
+        document.querySelector(`#${coin.name}L`).insertAdjacentHTML('beforeend', html);
+      });
+    }
   });
 
   for (let i = 0; i < document.querySelectorAll('.xBtn').length; i++) {
     document.querySelectorAll('.xBtn')[i].addEventListener("click", function(event) {
       const pair = event.target.id;
       deleteCoin(pair);
+    });
+  }
+
+  for (let i = 0; i < document.querySelectorAll('.expBtn').length; i++) {
+    document.querySelectorAll('.expBtn')[i].addEventListener('mouseenter', function(event) {
+      const btn = event.target.id;
+      if (document.querySelector(`#${btn}`).classList.contains('pulsing')) {
+        document.querySelector(`#${btn}`).classList.remove('pulsing');
+      }
     });
   }
 }
@@ -395,17 +446,26 @@ async function displayIntData() {
         }
       }
 
-      if (notifications.length >= 10) {
-        notifications.pop();
+      if (coin.logs.length >= 10) {
+        coin.logs.pop();
       }
 
       if (min < 10) {
-        notifications.unshift(`${coin.name} +${curVP}%v/m at $${coin.curPrice} on ${hour}:0${min}`);
+        if (pDif > 0) {
+          coin.logs.unshift(`$${coin.curPrice} (+${pDif}) and +${curVP}%v/m on ${hour}:0${min}`);
+        } else {
+          coin.logs.unshift(`$${coin.curPrice} (${pDif}) and +${curVP}%v/m on ${hour}:0${min}`);
+        }
       } else {
-        notifications.unshift(`${coin.name} +${curVP}%v/m at $${coin.curPrice} on ${hour}:${min}`);
+        if (pDif > 0) {
+          coin.logs.unshift(`$${coin.curPrice} (+${pDif}) and +${curVP}%v/m on ${hour}:${min}`);
+        } else {
+          coin.logs.unshift(`$${coin.curPrice} (${pDif}) and +${curVP}%v/m on ${hour}:${min}`);
+        }
       }
 
       document.querySelector('#noteDrop').classList.add('pulsing');
+      document.querySelector(`#${coin.name}X`).classList.add('pulsing');
 
     } else if (cVP >= alertPoint && sounds === false) {
       document.querySelector(`#${coin.name}V`).classList.add('hot');
@@ -434,18 +494,26 @@ async function displayIntData() {
         }
       }
 
-      if (notifications.length >= 10) {
-        notifications.pop();
+      if (coin.logs.length >= 10) {
+        coin.logs.pop();
       }
 
       if (min < 10) {
-        notifications.unshift(`${coin.name} +${curVP}%v/m at $${coin.curPrice} on ${hour}:0${min}`);
+        if (pDif > 0) {
+          coin.logs.unshift(`$${coin.curPrice} (+${pDif}) and +${curVP}%v/m on ${hour}:0${min}`);
+        } else {
+          coin.logs.unshift(`$${coin.curPrice} (${pDif}) and +${curVP}%v/m on ${hour}:0${min}`);
+        }
       } else {
-        notifications.unshift(`${coin.name} +${curVP}%v/m at $${coin.curPrice} on ${hour}:${min}`);
+        if (pDif > 0) {
+          coin.logs.unshift(`$${coin.curPrice} (+${pDif}) and +${curVP}%v/m on ${hour}:${min}`);
+        } else {
+          coin.logs.unshift(`$${coin.curPrice} (${pDif}) and +${curVP}%v/m on ${hour}:${min}`);
+        }
       }
 
       document.querySelector('#noteDrop').classList.add('pulsing');
-
+      document.querySelector(`#${coin.name}X`).classList.add('pulsing');
     };
 
     document.querySelector(`#${coin.name}V`).innerHTML = `${vF}/min | ${coin.aVm}/min`;
@@ -458,21 +526,23 @@ async function displayIntData() {
       document.querySelector(`#${coin.name}PP`).innerHTML = `${pDif}%`;
     };
 
-    if (notifications.length === 0) {
-      document.querySelector('.notifications').innerHTML = `
+    if (coin.logs.length === 0) {
+      document.querySelector(`#${coin.name}L`).innerHTML = `
+      <h3 class="logLbl">${coin.name}</h3>
       <hr class="shr">
-      <h4 style="color: grey;">No notifications yet.</h4>
+      <h4 style="text-align: center;">No events logged yet.</h4>
       `;
     } else {
-      document.querySelector('.notifications').innerHTML = `
+      document.querySelector(`#${coin.name}L`).innerHTML = `
+      <h3 class="logLbl">${coin.name}</h3>
       <hr class="shr">
       `;
 
-      notifications.forEach(note => {
+      coin.logs.forEach(log => {
         const html = `
-          <h4>${note}</h4>
+        <h4>${log}</h4>
         `;
-        document.querySelector(".notifications").insertAdjacentHTML('beforeend', html);
+        document.querySelector(`#${coin.name}L`).insertAdjacentHTML('beforeend', html);
       });
     };
   });
@@ -502,7 +572,7 @@ document.querySelector('.coinInput').addEventListener('keydown', function(event)
 });
 
 document.querySelector('#noteDrop').addEventListener('mouseenter', function() {
-  if (document.querySelector('.pulsing')) {
+  if (document.querySelector('#noteDrop').classList.contains('pulsing')) {
     document.querySelector('#noteDrop').classList.remove('pulsing');
   }
 });
