@@ -19,6 +19,7 @@
 
 /*
 make mobile friendly
+light/dark mode switch
 */
 
 ///////////Time/date stuff//////////////
@@ -222,8 +223,8 @@ function displayBlankCoins() {
       <span class="pairlabel">Pair</span>
       <span class="priceLabel">Price</span>
       <span class="statLabel">24hr%</span>
-      <span class="statLabel">${interval}min%</span>
-      <span class="volLabel">CurVol/Min | AveVol/Min</span>
+      <span class="intLbl">${interval}min%<span class="intTool">The price change for the interval of time that you set.</span></span>
+      <span class="volLabel">CurVol/Min | AveVol/Min<span class="vmTool">This compares the volume per minute for the interval of time that you set, to the average volume per minute for the last 3 hours. The average value is updated every hour. Everytime the current vol/m ticks higher than the ave vol/m, above your set alert point, it will be highlighted and added to the log.</span></span>
       <span class="removeLabel">Remove</span>
     </p>
     <hr class="hr">
@@ -231,6 +232,7 @@ function displayBlankCoins() {
     `;
     document.querySelector('.switch').classList.add('disabled');
     document.querySelector('.switch').disabled = true;
+    document.querySelector('.btnTool').textContent = 'Add a coin pair first.';
   } else {
     document.querySelector('.notifications').innerHTML = `
     <hr class="shr">
@@ -240,14 +242,15 @@ function displayBlankCoins() {
       <span class="pairlabel">Pair</span>
       <span class="priceLabel">Price</span>
       <span class="statLabel">24hr%</span>
-      <span class="statLabel">${interval}min%</span>
-      <span class="volLabel">CurVol/Min | AveVol/Min</span>
+      <span class="intLbl">${interval}min%<span class="intTool">The price change for the interval of time that you set.</span></span>
+      <span class="volLabel">CurVol/Min | AveVol/Min<span class="vmTool">This compares the volume per minute for the interval of time that you set, to the average volume per minute for the last 3 hours. The average value is updated every hour. Everytime the current vol/m ticks higher than the ave vol/m, above your set alert point, it will be highlighted and added to the log.</span></span>
       <span class="removeLabel">Remove</span>
     </p>
     <hr class="hr">
     `;
     document.querySelector('.switch').classList.remove('disabled');
     document.querySelector('.switch').disabled = false;
+    document.querySelector('.btnTool').textContent = 'Start Tracking.';
   };
 
   coins.forEach(coin => {
@@ -452,15 +455,15 @@ async function displayIntData() {
 
       if (min < 10) {
         if (pDif > 0) {
-          coin.logs.unshift(`$${coin.curPrice} (+${pDif}) and +${curVP}%v/m on ${hour}:0${min}`);
+          coin.logs.unshift(`$${coin.curPrice} (+${pDif}%) and +${curVP}%v/m at ${hour}:0${min}`);
         } else {
-          coin.logs.unshift(`$${coin.curPrice} (${pDif}) and +${curVP}%v/m on ${hour}:0${min}`);
+          coin.logs.unshift(`$${coin.curPrice} (${pDif}%) and +${curVP}%v/m at ${hour}:0${min}`);
         }
       } else {
         if (pDif > 0) {
-          coin.logs.unshift(`$${coin.curPrice} (+${pDif}) and +${curVP}%v/m on ${hour}:${min}`);
+          coin.logs.unshift(`$${coin.curPrice} (+${pDif}%) and +${curVP}%v/m at ${hour}:${min}`);
         } else {
-          coin.logs.unshift(`$${coin.curPrice} (${pDif}) and +${curVP}%v/m on ${hour}:${min}`);
+          coin.logs.unshift(`$${coin.curPrice} (${pDif}%) and +${curVP}%v/m at ${hour}:${min}`);
         }
       }
 
@@ -500,15 +503,15 @@ async function displayIntData() {
 
       if (min < 10) {
         if (pDif > 0) {
-          coin.logs.unshift(`$${coin.curPrice} (+${pDif}) and +${curVP}%v/m on ${hour}:0${min}`);
+          coin.logs.unshift(`$${coin.curPrice} (+${pDif}%) and +${curVP}%v/m at ${hour}:0${min}`);
         } else {
-          coin.logs.unshift(`$${coin.curPrice} (${pDif}) and +${curVP}%v/m on ${hour}:0${min}`);
+          coin.logs.unshift(`$${coin.curPrice} (${pDif}%) and +${curVP}%v/m at ${hour}:0${min}`);
         }
       } else {
         if (pDif > 0) {
-          coin.logs.unshift(`$${coin.curPrice} (+${pDif}) and +${curVP}%v/m on ${hour}:${min}`);
+          coin.logs.unshift(`$${coin.curPrice} (+${pDif}%) and +${curVP}%v/m at ${hour}:${min}`);
         } else {
-          coin.logs.unshift(`$${coin.curPrice} (${pDif}) and +${curVP}%v/m on ${hour}:${min}`);
+          coin.logs.unshift(`$${coin.curPrice} (${pDif}%) and +${curVP}%v/m at ${hour}:${min}`);
         }
       }
 
@@ -606,8 +609,8 @@ document.querySelector('.alertS').addEventListener('click', function(event) {
 });
 
 document.querySelector('.switch').addEventListener('click', function() {
-  if (document.querySelector('.switch').textContent === 'II') {
-    document.querySelector('.switch').textContent = '>';
+  if (document.querySelector('.switch').innerHTML === 'II<span class="btnTool">Stop Tracking.</span>') {
+    document.querySelector('.switch').innerHTML = '><span class="btnTool">Start Tracking.</span>';
     document.querySelector('.switch').classList.add('disabled');
     document.querySelector('.switch').disabled = true;
     document.querySelector('.add').classList.remove('disabled');
@@ -619,7 +622,7 @@ document.querySelector('.switch').addEventListener('click', function() {
     stopTracking();
     displayBlankCoins();
   } else {
-    document.querySelector('.switch').textContent = 'II';
+    document.querySelector('.switch').innerHTML = 'II<span class="btnTool">Stop Tracking.</span>';
     document.querySelector('.add').disabled = true;
     document.querySelector('.add').classList.add('disabled');
     document.querySelector('.coinInput').disabled = true;

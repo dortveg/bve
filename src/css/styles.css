@@ -374,6 +374,31 @@ button:hover {
   min-height: 40px;
   width: 40px;
   font-size: 220%;
+  position: relative;
+}
+
+.switch .btnTool {
+  visibility: hidden;
+  width: 12rem;
+  background-color: #3B3A45;
+  color: #F7F2DE;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 130%;
+  left: 50%;
+  margin-left: -10rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-family: 'Typori';
+  font-size: 1rem;
+}
+
+.switch:hover .btnTool {
+  visibility: visible;
+  opacity: .9;
 }
 
 /*//////////////////////////////COIN BOX////////////////////////////////*/
@@ -411,6 +436,35 @@ p {
   margin-right: .5rem;
 }
 
+.intLbl {
+  margin-left: 1rem;
+  margin-right: .5rem;
+  border-bottom: 1px dotted grey;
+  position: relative;
+}
+
+.intLbl .intTool {
+  visibility: hidden;
+  width: 8rem;
+  background-color: #3B3A45;
+  color: #F7F2DE;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 250%;
+  left: 50%;
+  margin-left: -4rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.intLbl:hover .intTool {
+  visibility: visible;
+  opacity: .9;
+}
+
 .priceLabel {
   margin-left: 0;
   padding-right: 1rem;
@@ -420,6 +474,30 @@ p {
   margin-left: 1.7rem;
   margin-right: .2rem;
   padding-right: 0;
+  position: relative;
+  border-bottom: 1px dotted grey;
+}
+
+.volLabel .vmTool {
+  visibility: hidden;
+  width: 15rem;
+  background-color: #3B3A45;
+  color: #F7F2DE;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 250%;
+  left: 50%;
+  margin-left: -7.5rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.volLabel:hover .vmTool {
+  visibility: visible;
+  opacity: .9;
 }
 
 .removeLabel {
