@@ -107,11 +107,16 @@ h1 {
   width: 2rem;
 }
 
-.selected {
+/* .selected {
   background: linear-gradient(to bottom right, #C54C24 0%, #dab367 50%, #C54C24 100%);
   background-clip: unset;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-weight: bold;
+} */
+
+.option .selected {
+  color: #dab367;
   font-weight: bold;
 }
 
@@ -225,7 +230,7 @@ hr {
   border-bottom-right-radius: 5px;
   border-top-right-radius: 5px;
   border-top-left-radius: 5px;
-  padding-top: 0;
+  padding-top: .75rem;
   padding-bottom: .5rem;
   margin-left: .2rem;
   margin-top: -1.65rem;
@@ -239,7 +244,89 @@ hr {
   margin-top: .5rem;
   margin-bottom: .5rem;
   font-family: 'Typori';
-  font-size: 1.1rem;
+  font-size: 114%;
+  margin-left: 40%;
+  font-weight: bold;
+}
+
+.fakeBtn .alertTool {
+  visibility: hidden;
+  width: 11rem;
+  background-color: #3B3A45;
+  color: #F7F2DE;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 101%;
+  left: 96%;
+  margin-left: -10rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-family: 'Typori';
+  font-size: .9rem;
+}
+
+.fakeBtn:hover .alertTool {
+  visibility: visible;
+  opacity: .9;
+}
+
+.alertSetup {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: .5rem;
+}
+
+.alBtn, .rmAlrt {
+  margin-left: 0;
+  min-height: 0;
+  height: 2rem;
+  width: 2rem;
+  padding: 0;
+}
+
+.check {
+  width: 1.5rem;
+  padding-bottom: .75rem;
+}
+
+.rmAl {
+  width: 1.3rem;
+  padding-bottom: .8rem;
+}
+
+.hidden {
+  display: none;
+}
+
+.alertLbl {
+  color:#F7F2DE;
+  font-family: 'Typori';
+  padding-right: .8rem;
+  padding-left: .5rem;
+}
+
+.priceAlert {
+  padding-bottom: 2px;
+  padding-top: 2px;
+  text-align: center;
+  width: 5rem;
+  margin-right: .5rem;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 2px;
+}
+
+.fakeBtn {
+  margin-left: 2px;
+}
+
+.bell {
+  width: 15px;
+  margin-bottom: -1px;
 }
 
 a {

@@ -263,7 +263,17 @@ function displayBlankCoins() {
       <div class="expandbl">
         <button id="${coin.name}X" class="expBtn">${coin.name}</button>
         <div id="${coin.name}L" class="logs">
-          <h3 class="logLbl">${coin.name}</h3>
+          <span class="logLbl">${coin.name}</span>
+          <span class="fakeBtn hidden">
+            <img class="bell" src="src/icons/bell.svg"/>
+            <span class="alertTool">Alert set at: $42000.69</span>
+          </span>
+          <div class="alertSetup">
+            <span class="alertLbl">Alert me at:</span>
+            <input class="priceAlert" type="text" name="interval" placeholder="TYPE IN PRICE" autocomplete="off">
+            <button class="alBtn"><img class="check" src="src/icons/ok.svg"/></button>
+            <button class="rmAlrt hidden"><img class="rmAl" src="src/icons/cancel.svg"/></button>
+          </div>
           <hr class="shr">
           <h4 style="text-align: center;">No events logged yet.</h4>
         </div>
@@ -274,7 +284,17 @@ function displayBlankCoins() {
       <div class="expandbl">
         <button id="${coin.name}X" class="expBtn">${coin.name}</button>
         <div id="${coin.name}L" class="logs">
-          <h3 class="logLbl">${coin.name}</h3>
+          <span class="logLbl">${coin.name}</span>
+          <span class="fakeBtn hidden">
+            <img class="bell" src="src/icons/bell.svg"/>
+            <span class="alertTool">Alert set at: $42000.69</span>
+          </span>
+          <div class="alertSetup">
+            <span class="alertLbl">Alert me at:</span>
+            <input class="priceAlert" type="text" name="interval" placeholder="TYPE IN PRICE" autocomplete="off">
+            <button class="alBtn"><img class="check" src="src/icons/ok.svg"/></button>
+            <button class="rmAlrt hidden"><img class="rmAl" src="src/icons/cancel.svg"/></button>
+          </div>
           <hr class="shr">
         </div>
       </div>
