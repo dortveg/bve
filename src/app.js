@@ -156,7 +156,8 @@ let ticker;
 const coins = [];
 let interval = 1;
 const alertSound = new Audio('src/sound/boop.wav');
-const hotSound = new Audio('src/sound/alert.wav');
+const hotSound = new Audio('src/sound/volAlert.wav');
+const priceSound = new Audio('src/sound/priceAlert.wav');
 let sounds = true;
 let alertPoint = 1.0;
 
@@ -171,6 +172,8 @@ function Coin(pair) {
   this.oneTicks = [];
   this.fiveTicks = [];
   this.logs = [];
+  this.alert = false;
+  this.alertPrice = 0;
 }
 
 function startTracking(int) {
@@ -264,18 +267,20 @@ function displayBlankCoins() {
         <button id="${coin.name}X" class="expBtn">${coin.name}</button>
         <div id="${coin.name}L" class="logs">
           <span class="logLbl">${coin.name}</span>
-          <span class="fakeBtn hidden">
+          <span id="${coin.name}Bell" class="fakeBtn hidden">
             <img class="bell" src="src/icons/bell.svg"/>
-            <span class="alertTool">Alert set at: $42000.69</span>
+            <span id="${coin.name}AlertTool" class="alertTool"></span>
           </span>
           <div class="alertSetup">
             <span class="alertLbl">Alert me at:</span>
-            <input class="priceAlert" type="text" name="interval" placeholder="TYPE IN PRICE" autocomplete="off">
-            <button class="alBtn"><img class="check" src="src/icons/ok.svg"/></button>
-            <button class="rmAlrt hidden"><img class="rmAl" src="src/icons/cancel.svg"/></button>
+            <input id="${coin.name}AP" class="priceAlert" type="text" name="interval" placeholder="TYPE IN PRICE" autocomplete="off">
+            <button id="${coin.name}SA" class="alBtn"><img class="check" src="src/icons/ok.svg"/></button>
+            <button id="${coin.name}RA" class="rmAlrt hidden"><img class="rmAl" src="src/icons/cancel.svg"/></button>
           </div>
           <hr class="shr">
+          <div id="${coin.name}Logs">
           <h4 style="text-align: center;">No events logged yet.</h4>
+          </div>
         </div>
       </div>
       `;
@@ -285,17 +290,19 @@ function displayBlankCoins() {
         <button id="${coin.name}X" class="expBtn">${coin.name}</button>
         <div id="${coin.name}L" class="logs">
           <span class="logLbl">${coin.name}</span>
-          <span class="fakeBtn hidden">
+          <span id="${coin.name}Bell" class="fakeBtn hidden">
             <img class="bell" src="src/icons/bell.svg"/>
-            <span class="alertTool">Alert set at: $42000.69</span>
+            <span id="${coin.name}AlertTool" class="alertTool"></span>
           </span>
           <div class="alertSetup">
             <span class="alertLbl">Alert me at:</span>
-            <input class="priceAlert" type="text" name="interval" placeholder="TYPE IN PRICE" autocomplete="off">
-            <button class="alBtn"><img class="check" src="src/icons/ok.svg"/></button>
-            <button class="rmAlrt hidden"><img class="rmAl" src="src/icons/cancel.svg"/></button>
+            <input id="${coin.name}AP" class="priceAlert" type="text" name="interval" placeholder="TYPE IN PRICE" autocomplete="off">
+            <button id="${coin.name}SA" class="alBtn"><img class="check" src="src/icons/ok.svg"/></button>
+            <button id="${coin.name}RA" class="rmAlrt hidden"><img class="rmAl" src="src/icons/cancel.svg"/></button>
           </div>
           <hr class="shr">
+          <div id="${coin.name}Logs">
+          </div>
         </div>
       </div>
       `;
@@ -320,7 +327,7 @@ function displayBlankCoins() {
         const html = `
         <h4>${log}</h4>
         `;
-        document.querySelector(`#${coin.name}L`).insertAdjacentHTML('beforeend', html);
+        document.querySelector(`#${coin.name}Logs`).insertAdjacentHTML('beforeend', html);
       });
     }
   });
@@ -340,6 +347,26 @@ function displayBlankCoins() {
       }
     });
   }
+
+  coins.forEach(coin => {
+    document.querySelector(`#${coin.name}SA`).addEventListener('click', function() {
+      let userInput = document.querySelector(`#${coin.name}AP`).value;
+      let alertPrice = parseFloat(userInput);
+      coin.alert = true;
+      coin.alertPrice = alertPrice;
+      document.querySelector(`#${coin.name}AP`).value = '';
+      document.querySelector(`#${coin.name}RA`).classList.remove('hidden');
+      document.querySelector(`#${coin.name}AlertTool`).innerHTML = `Alert set at: $${alertPrice}`;
+      document.querySelector(`#${coin.name}Bell`).classList.remove('hidden');
+    });
+
+    document.querySelector(`#${coin.name}RA`).addEventListener('click', function() {
+      coin.alertPrice = 0;
+      coin.alert = false;
+      document.querySelector(`#${coin.name}RA`).classList.add('hidden');
+      document.querySelector(`#${coin.name}Bell`).classList.add('hidden');
+    });
+  });
 }
 
 async function initData() {
@@ -395,6 +422,32 @@ async function displayTickData() {
       document.querySelector(`#${coin.name}DP`).style.color = '#d2121a';
       document.querySelector(`#${coin.name}DP`).innerHTML = `${priceP}%`;
     };
+
+    const floatPrice = parseFloat(price);
+    if (coin.alert === true) {
+      if (floatPrice >= coin.alertPrice) {
+        priceSound.play();
+        document.querySelector('#noteDrop').classList.add('pulsing');
+        document.querySelector(`#${coin.name}X`).classList.add('pulsing');
+        if (min < 10) {
+            coin.logs.unshift(`Alert price hit! $${coin.curPrice} at ${hour}:0${min}`);
+        } else {
+            coin.logs.unshift(`Alert Price hit! $${coin.curPrice} at ${hour}:${min}`);
+        }
+        document.querySelector(`#${coin.name}Logs`).innerHTML = '';
+
+        coin.logs.forEach(log => {
+          const html = `
+          <h4>${log}</h4>
+          `;
+          document.querySelector(`#${coin.name}Logs`).insertAdjacentHTML('beforeend', html);
+        });
+        coin.alertPrice = 0;
+        coin.alert = false;
+        document.querySelector(`#${coin.name}RA`).classList.add('hidden');
+        document.querySelector(`#${coin.name}Bell`).classList.add('hidden');
+      }
+    }
   });
 
   setDates();
@@ -550,24 +603,17 @@ async function displayIntData() {
     };
 
     if (coin.logs.length === 0) {
-      document.querySelector(`#${coin.name}L`).innerHTML = `
-      <h3 class="logLbl">${coin.name}</h3>
-      <hr class="shr">
-      <h4 style="text-align: center;">No events logged yet.</h4>
-      `;
+      document.querySelector(`#${coin.name}Logs`).innerHTML = '<h4 style="text-align: center;">No events logged yet.</h4>';
     } else {
-      document.querySelector(`#${coin.name}L`).innerHTML = `
-      <h3 class="logLbl">${coin.name}</h3>
-      <hr class="shr">
-      `;
+      document.querySelector(`#${coin.name}Logs`).innerHTML = '';
 
       coin.logs.forEach(log => {
         const html = `
         <h4>${log}</h4>
         `;
-        document.querySelector(`#${coin.name}L`).insertAdjacentHTML('beforeend', html);
+        document.querySelector(`#${coin.name}Logs`).insertAdjacentHTML('beforeend', html);
       });
-    };
+    }
   });
 }
 
