@@ -107,14 +107,6 @@ h1 {
   width: 2rem;
 }
 
-/* .selected {
-  background: linear-gradient(to bottom right, #C54C24 0%, #dab367 50%, #C54C24 100%);
-  background-clip: unset;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: bold;
-} */
-
 .option .selected {
   color: #dab367;
   font-weight: bold;
@@ -284,18 +276,18 @@ hr {
   margin-left: 0;
   min-height: 0;
   height: 2rem;
-  width: 2rem;
+  width: 1.5rem;
   padding: 0;
 }
 
 .check {
   width: 1.5rem;
-  padding-bottom: .75rem;
+  padding-bottom: 11px;
 }
 
 .rmAl {
-  width: 1.3rem;
-  padding-bottom: .8rem;
+  width: 1.29rem;
+  padding-bottom: 12px;
 }
 
 .hidden {
@@ -305,24 +297,33 @@ hr {
 .alertLbl {
   color:#F7F2DE;
   font-family: 'Typori';
-  padding-right: .8rem;
+  padding-right: 4px;
   padding-left: .5rem;
+}
+
+.alertLbl a {
+  color: #dab367;
+  text-decoration: none;
+  margin: 0;
+  font-size: 100%;
+  font-weight: bold;
+  border-bottom: 1px dotted #dab367;
 }
 
 .priceAlert {
   padding-bottom: 2px;
-  padding-top: 2px;
+  /* padding-top: 2px; */
   text-align: center;
-  width: 5rem;
-  margin-right: .5rem;
+  width: 4.5rem;
+  margin-right: .4rem;
   border: none;
   border-radius: 5px;
-  margin-bottom: 2px;
+  /* margin-bottom: 2px; */
 }
 
-.fakeBtn {
+/* .fakeBtn {
   margin-left: 2px;
-}
+} */
 
 .bell {
   width: 15px;
@@ -595,6 +596,7 @@ p {
 .hr {
   width: 70%;
   margin-top: 1rem;
+  margin-bottom: 1.5rem;
   border: 1px solid #131420;
   border-radius: 5px;
 }

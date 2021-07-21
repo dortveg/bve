@@ -18,8 +18,8 @@
 
 
 /*
-make mobile friendly
-light/dark mode switch
+make mobile friendly???
+polish price alerts
 */
 
 ///////////Time/date stuff//////////////
@@ -172,7 +172,7 @@ function Coin(pair) {
   this.oneTicks = [];
   this.fiveTicks = [];
   this.logs = [];
-  this.alert = false;
+  this.alert = 'higher';
   this.alertPrice = 0;
 }
 
@@ -259,6 +259,7 @@ function displayBlankCoins() {
   coins.forEach(coin => {
     coin.index = counter;
     counter++;
+    coin.alertPrice = 0;
 
     let logHtml;
     if (coin.logs.length === 0) {
@@ -272,7 +273,7 @@ function displayBlankCoins() {
             <span id="${coin.name}AlertTool" class="alertTool"></span>
           </span>
           <div class="alertSetup">
-            <span class="alertLbl">Alert me at:</span>
+            <span class="alertLbl">Alert when<a id="${coin.name}AlertType" style="margin-left: 4px;margin-right: 4px" href="javascript:void(0)">${coin.alert}</a>than $</span>
             <input id="${coin.name}AP" class="priceAlert" type="text" name="interval" placeholder="TYPE IN PRICE" autocomplete="off">
             <button id="${coin.name}SA" class="alBtn"><img class="check" src="src/icons/ok.svg"/></button>
             <button id="${coin.name}RA" class="rmAlrt hidden"><img class="rmAl" src="src/icons/cancel.svg"/></button>
@@ -295,7 +296,7 @@ function displayBlankCoins() {
             <span id="${coin.name}AlertTool" class="alertTool"></span>
           </span>
           <div class="alertSetup">
-            <span class="alertLbl">Alert me at:</span>
+            <span class="alertLbl">Alert when<a id="${coin.name}AlertType" style="margin-left: 4px;margin-right: 4px" href="javascript:void(0)">${coin.alert}</a>than $</span>
             <input id="${coin.name}AP" class="priceAlert" type="text" name="interval" placeholder="TYPE IN PRICE" autocomplete="off">
             <button id="${coin.name}SA" class="alBtn"><img class="check" src="src/icons/ok.svg"/></button>
             <button id="${coin.name}RA" class="rmAlrt hidden"><img class="rmAl" src="src/icons/cancel.svg"/></button>
@@ -349,10 +350,20 @@ function displayBlankCoins() {
   }
 
   coins.forEach(coin => {
+    document.querySelector(`#${coin.name}AlertType`).addEventListener('click', function() {
+      if (document.querySelector(`#${coin.name}AlertType`).textContent === 'lower') {
+        document.querySelector(`#${coin.name}AlertType`).textContent = 'higher';
+        coin.alert = 'higher';
+      } else {
+        document.querySelector(`#${coin.name}AlertType`).textContent = 'lower';
+        coin.alert = 'lower';
+      }
+    });
+
     document.querySelector(`#${coin.name}SA`).addEventListener('click', function() {
       let userInput = document.querySelector(`#${coin.name}AP`).value;
       let alertPrice = parseFloat(userInput);
-      coin.alert = true;
+      // coin.alert = true;
       coin.alertPrice = alertPrice;
       document.querySelector(`#${coin.name}AP`).value = '';
       document.querySelector(`#${coin.name}RA`).classList.remove('hidden');
@@ -362,9 +373,15 @@ function displayBlankCoins() {
 
     document.querySelector(`#${coin.name}RA`).addEventListener('click', function() {
       coin.alertPrice = 0;
-      coin.alert = false;
+      // coin.alert = false;
       document.querySelector(`#${coin.name}RA`).classList.add('hidden');
       document.querySelector(`#${coin.name}Bell`).classList.add('hidden');
+    });
+
+    document.querySelector(`#${coin.name}AP`).addEventListener('keydown', function(event) {
+      if (event.key === "Enter") {
+        document.querySelector(`#${coin.name}SA`).click();
+      }
     });
   });
 }
@@ -397,6 +414,8 @@ async function initData() {
 }
 
 async function displayTickData() {
+  setDates();
+  
   if (min === 0 && sec < 5) {
     coins.forEach(async(coin) => {
       const aveVol = await getAveVol(coin.name);
@@ -424,33 +443,54 @@ async function displayTickData() {
     };
 
     const floatPrice = parseFloat(price);
-    if (coin.alert === true) {
-      if (floatPrice >= coin.alertPrice) {
-        priceSound.play();
-        document.querySelector('#noteDrop').classList.add('pulsing');
-        document.querySelector(`#${coin.name}X`).classList.add('pulsing');
-        if (min < 10) {
-            coin.logs.unshift(`Alert price hit! $${coin.curPrice} at ${hour}:0${min}`);
-        } else {
-            coin.logs.unshift(`Alert Price hit! $${coin.curPrice} at ${hour}:${min}`);
+    if (coin.alertPrice !== 0) {
+      if (coin.alert === 'higher') {
+        if (floatPrice >= coin.alertPrice) {
+          priceSound.play();
+          document.querySelector('#noteDrop').classList.add('pulsing');
+          document.querySelector(`#${coin.name}X`).classList.add('pulsing');
+          if (min < 10) {
+              coin.logs.unshift(`Alert price hit! $${price} at ${hour}:0${min}`);
+          } else {
+              coin.logs.unshift(`Alert Price hit! $${price} at ${hour}:${min}`);
+          }
+          document.querySelector(`#${coin.name}Logs`).innerHTML = '';
+  
+          coin.logs.forEach(log => {
+            const html = `
+            <h4>${log}</h4>
+            `;
+            document.querySelector(`#${coin.name}Logs`).insertAdjacentHTML('beforeend', html);
+          });
+          coin.alertPrice = 0;
+          document.querySelector(`#${coin.name}RA`).classList.add('hidden');
+          document.querySelector(`#${coin.name}Bell`).classList.add('hidden');
         }
-        document.querySelector(`#${coin.name}Logs`).innerHTML = '';
-
-        coin.logs.forEach(log => {
-          const html = `
-          <h4>${log}</h4>
-          `;
-          document.querySelector(`#${coin.name}Logs`).insertAdjacentHTML('beforeend', html);
-        });
-        coin.alertPrice = 0;
-        coin.alert = false;
-        document.querySelector(`#${coin.name}RA`).classList.add('hidden');
-        document.querySelector(`#${coin.name}Bell`).classList.add('hidden');
+      } else {
+        if (floatPrice <= coin.alertPrice) {
+          priceSound.play();
+          document.querySelector('#noteDrop').classList.add('pulsing');
+          document.querySelector(`#${coin.name}X`).classList.add('pulsing');
+          if (min < 10) {
+              coin.logs.unshift(`Alert price hit! $${coin.curPrice} at ${hour}:0${min}`);
+          } else {
+              coin.logs.unshift(`Alert Price hit! $${coin.curPrice} at ${hour}:${min}`);
+          }
+          document.querySelector(`#${coin.name}Logs`).innerHTML = '';
+  
+          coin.logs.forEach(log => {
+            const html = `
+            <h4>${log}</h4>
+            `;
+            document.querySelector(`#${coin.name}Logs`).insertAdjacentHTML('beforeend', html);
+          });
+          coin.alertPrice = 0;
+          document.querySelector(`#${coin.name}RA`).classList.add('hidden');
+          document.querySelector(`#${coin.name}Bell`).classList.add('hidden');
+        }
       }
     }
   });
-
-  setDates();
 }
 
 async function displayIntData() {
