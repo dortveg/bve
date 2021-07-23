@@ -19,7 +19,6 @@
 
 /*
 make mobile friendly???
-polish price alerts
 */
 
 ///////////Time/date stuff//////////////
@@ -33,22 +32,18 @@ let min;
 let sec;
 
 let prevHour;
-let oldHr;
 let sixHrs;
 let prevDay;
 let oneDay;
-let twoDay;
 let sixDay;
 
 let startDate;
 let prevDate;
-let oldDate;
 let sixDate;
 
 let startTS;
 let curTS;
 let prevTS;
-let oldTS;
 let sixTS;
 
 function setDates() {
@@ -82,22 +77,12 @@ function setDates() {
     oneDay = day;
   };
 
-  if ((hour - 2 ) < 0) {
-    oldHr = (hour - 2) + 24;
-    twoDay = prevDay;
-  } else {
-    oldHr = hour - 2;
-    twoDay = day;
-  };
-
   startDate = new Date(year, month, day, hour, 0, sec);
   prevDate = new Date(year, month, oneDay, prevHour, min, sec);
-  oldDate = new Date(year, month, twoDay, oldHr, 0, sec );
   sixDate = new Date(year, month, sixDay, sixHrs, 0, sec );
   startTS = startDate.getTime();
   curTS = date.getTime();
   prevTS = prevDate.getTime();
-  oldTS = oldDate.getTime();
   sixTS = sixDate.getTime();
 }
 
@@ -124,14 +109,14 @@ async function getAveVol(pair) {
     const vol1 = parseFloat(data[2][5]);
     const vol2 = parseFloat(data[3][5]);
     const vol3 = parseFloat(data[4][5]);
-    const ave = ((vol1 + vol2 + vol3) / 3);
-    return ave;
+    const aveVol = ((vol1 + vol2 + vol3) / 3);
+    return aveVol;
   } catch (error) {
     console.error(error);
   }
 };
 
-async function get24P(pair) {
+async function get24hrPercent(pair) {
   try {
     const res = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbol=' + pair);
     const data = await res.json();
@@ -363,7 +348,6 @@ function displayBlankCoins() {
     document.querySelector(`#${coin.name}SA`).addEventListener('click', function() {
       let userInput = document.querySelector(`#${coin.name}AP`).value;
       let alertPrice = parseFloat(userInput);
-      // coin.alert = true;
       coin.alertPrice = alertPrice;
       document.querySelector(`#${coin.name}AP`).value = '';
       document.querySelector(`#${coin.name}RA`).classList.remove('hidden');
@@ -373,7 +357,6 @@ function displayBlankCoins() {
 
     document.querySelector(`#${coin.name}RA`).addEventListener('click', function() {
       coin.alertPrice = 0;
-      // coin.alert = false;
       document.querySelector(`#${coin.name}RA`).classList.add('hidden');
       document.querySelector(`#${coin.name}Bell`).classList.add('hidden');
     });
@@ -392,16 +375,16 @@ async function initData() {
     const volData = await getCurVol(coin.name);
     coin.curPrice = priceData.substring(0, 8);
     coin.curVol = volData.substring(0, 8);
-    const dayPData = await get24P(coin.name);
-    const pricePNum = parseFloat(dayPData);
-    const priceP = pricePNum.toFixed(2);
+    const dayPercentData = await get24hrPercent(coin.name);
+    const convertedData = parseFloat(dayPercentData);
+    const dayPricePercent = convertedData.toFixed(2);
 
-    if (priceP > 0) {
+    if (dayPricePercent > 0) {
       document.querySelector(`#${coin.name}DP`).style.color = '#05b114';
-      document.querySelector(`#${coin.name}DP`).innerHTML = `+${priceP}%`;
+      document.querySelector(`#${coin.name}DP`).innerHTML = `+${dayPricePercent}%`;
     } else {
       document.querySelector(`#${coin.name}DP`).style.color = '#d2121a';
-      document.querySelector(`#${coin.name}DP`).innerHTML = `${priceP}%`;
+      document.querySelector(`#${coin.name}DP`).innerHTML = `${dayPricePercent}%`;
     };
 
     const aveVol = await getAveVol(coin.name);
@@ -427,19 +410,19 @@ async function displayTickData() {
 
   coins.forEach(async(coin) => {
     const priceData = await getPrice(coin.name);
-    const dayPData = await get24P(coin.name);
+    const dayPercentData = await get24hrPercent(coin.name);
     const price = priceData.substring(0, 8);
-    const pricePNum = parseFloat(dayPData);
-    const priceP = pricePNum.toFixed(2);
+    const convertedData = parseFloat(dayPercentData);
+    const dayPricePercent = convertedData.toFixed(2);
     
     document.querySelector(`#${coin.name}P`).innerHTML = price;
 
-    if (priceP > 0) {
+    if (dayPricePercent > 0) {
       document.querySelector(`#${coin.name}DP`).style.color = '#05b114';
-      document.querySelector(`#${coin.name}DP`).innerHTML = `+${priceP}%`;
+      document.querySelector(`#${coin.name}DP`).innerHTML = `+${dayPricePercent}%`;
     } else {
       document.querySelector(`#${coin.name}DP`).style.color = '#d2121a';
-      document.querySelector(`#${coin.name}DP`).innerHTML = `${priceP}%`;
+      document.querySelector(`#${coin.name}DP`).innerHTML = `${dayPricePercent}%`;
     };
 
     const floatPrice = parseFloat(price);
@@ -472,9 +455,9 @@ async function displayTickData() {
           document.querySelector('#noteDrop').classList.add('pulsing');
           document.querySelector(`#${coin.name}X`).classList.add('pulsing');
           if (min < 10) {
-              coin.logs.unshift(`Alert price hit! $${coin.curPrice} at ${hour}:0${min}`);
+              coin.logs.unshift(`Alert price hit! $${price} at ${hour}:0${min}`);
           } else {
-              coin.logs.unshift(`Alert Price hit! $${coin.curPrice} at ${hour}:${min}`);
+              coin.logs.unshift(`Alert Price hit! $${price} at ${hour}:${min}`);
           }
           document.querySelector(`#${coin.name}Logs`).innerHTML = '';
   
@@ -509,14 +492,14 @@ async function displayIntData() {
     const volData = await getCurVol(coin.name);
     coin.curPrice = priceData.substring(0, 8);
     coin.curVol = volData.substring(0, 8);
-    const priceDif = (coin.curPrice - coin.lastPrice) / coin.lastPrice;
-    const volFlow = (coin.curVol - coin.lastVol);
-    const cVP = (volFlow - coin.aVm) / coin.aVm;
-    const curVP = (cVP * 100).toFixed();
-    const pDif = (priceDif * 100).toFixed(3);
-    const vF = volFlow.toFixed();
+    const priceDiffRaw = (coin.curPrice - coin.lastPrice) / coin.lastPrice;
+    const volPerMin = (coin.curVol - coin.lastVol);
+    const volPerMinRate = (volPerMin - coin.aVm) / coin.aVm;
+    const volPerMinPercent = (volPerMinRate * 100).toFixed();
+    const priceDifference = (priceDiffRaw * 100).toFixed(3);
+    const volPerMinute = volPerMin.toFixed();
 
-    if (cVP < alertPoint) {
+    if (volPerMinRate < alertPoint) {
       if (interval === 1) {
         coin.oneTicks.push(0);
 
@@ -532,7 +515,7 @@ async function displayIntData() {
       }
     }
 
-    if (cVP >= alertPoint && sounds === true) {
+    if (volPerMinRate >= alertPoint && sounds === true) {
       alertSound.play();
       document.querySelector(`#${coin.name}V`).classList.add('hot');
 
@@ -567,23 +550,23 @@ async function displayIntData() {
       }
 
       if (min < 10) {
-        if (pDif > 0) {
-          coin.logs.unshift(`$${coin.curPrice} (+${pDif}%) and +${curVP}%v/m at ${hour}:0${min}`);
+        if (priceDifference > 0) {
+          coin.logs.unshift(`$${coin.curPrice} (+${priceDifference}%) and +${volPerMinPercent}%v/m at ${hour}:0${min}`);
         } else {
-          coin.logs.unshift(`$${coin.curPrice} (${pDif}%) and +${curVP}%v/m at ${hour}:0${min}`);
+          coin.logs.unshift(`$${coin.curPrice} (${priceDifference}%) and +${volPerMinPercent}%v/m at ${hour}:0${min}`);
         }
       } else {
-        if (pDif > 0) {
-          coin.logs.unshift(`$${coin.curPrice} (+${pDif}%) and +${curVP}%v/m at ${hour}:${min}`);
+        if (priceDifference > 0) {
+          coin.logs.unshift(`$${coin.curPrice} (+${priceDifference}%) and +${volPerMinPercent}%v/m at ${hour}:${min}`);
         } else {
-          coin.logs.unshift(`$${coin.curPrice} (${pDif}%) and +${curVP}%v/m at ${hour}:${min}`);
+          coin.logs.unshift(`$${coin.curPrice} (${priceDifference}%) and +${volPerMinPercent}%v/m at ${hour}:${min}`);
         }
       }
 
       document.querySelector('#noteDrop').classList.add('pulsing');
       document.querySelector(`#${coin.name}X`).classList.add('pulsing');
 
-    } else if (cVP >= alertPoint && sounds === false) {
+    } else if (volPerMinRate >= alertPoint && sounds === false) {
       document.querySelector(`#${coin.name}V`).classList.add('hot');
 
       if (interval === 1) {
@@ -615,16 +598,16 @@ async function displayIntData() {
       }
 
       if (min < 10) {
-        if (pDif > 0) {
-          coin.logs.unshift(`$${coin.curPrice} (+${pDif}%) and +${curVP}%v/m at ${hour}:0${min}`);
+        if (priceDifference > 0) {
+          coin.logs.unshift(`$${coin.curPrice} (+${priceDifference}%) and +${volPerMinPercent}%v/m at ${hour}:0${min}`);
         } else {
-          coin.logs.unshift(`$${coin.curPrice} (${pDif}%) and +${curVP}%v/m at ${hour}:0${min}`);
+          coin.logs.unshift(`$${coin.curPrice} (${priceDifference}%) and +${volPerMinPercent}%v/m at ${hour}:0${min}`);
         }
       } else {
-        if (pDif > 0) {
-          coin.logs.unshift(`$${coin.curPrice} (+${pDif}%) and +${curVP}%v/m at ${hour}:${min}`);
+        if (priceDifference > 0) {
+          coin.logs.unshift(`$${coin.curPrice} (+${priceDifference}%) and +${volPerMinPercent}%v/m at ${hour}:${min}`);
         } else {
-          coin.logs.unshift(`$${coin.curPrice} (${pDif}%) and +${curVP}%v/m at ${hour}:${min}`);
+          coin.logs.unshift(`$${coin.curPrice} (${priceDifference}%) and +${volPerMinPercent}%v/m at ${hour}:${min}`);
         }
       }
 
@@ -632,14 +615,14 @@ async function displayIntData() {
       document.querySelector(`#${coin.name}X`).classList.add('pulsing');
     };
 
-    document.querySelector(`#${coin.name}V`).innerHTML = `${vF}/min | ${coin.aVm}/min`;
+    document.querySelector(`#${coin.name}V`).innerHTML = `${volPerMinute}/min | ${coin.aVm}/min`;
 
-    if (pDif > 0) {
+    if (priceDifference > 0) {
       document.querySelector(`#${coin.name}PP`).style.color = '#05b114';
-      document.querySelector(`#${coin.name}PP`).innerHTML = `+${pDif}%`;
+      document.querySelector(`#${coin.name}PP`).innerHTML = `+${priceDifference}%`;
     } else {
       document.querySelector(`#${coin.name}PP`).style.color = '#d2121a';
-      document.querySelector(`#${coin.name}PP`).innerHTML = `${pDif}%`;
+      document.querySelector(`#${coin.name}PP`).innerHTML = `${priceDifference}%`;
     };
 
     if (coin.logs.length === 0) {
@@ -686,12 +669,12 @@ document.querySelector('#noteDrop').addEventListener('mouseenter', function() {
   }
 });
 
-let intOption = 'one';
+let intervalOption = 'one';
 document.querySelector('.intervals').addEventListener('click', function(event) {
   interval = parseInt(document.querySelector(`#${event.target.id}`).innerHTML);
-  document.querySelector(`#${intOption}`).classList.remove('selected');
+  document.querySelector(`#${intervalOption}`).classList.remove('selected');
   document.querySelector(`#${event.target.id}`).classList.add('selected');
-  intOption = event.target.id;
+  intervalOption = event.target.id;
 });
 
 let alertOption = 'dbl';
