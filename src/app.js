@@ -32,19 +32,19 @@ let min;
 let sec;
 
 let prevHour;
-let sixHrs;
+let foHrs;
 let prevDay;
 let oneDay;
-let sixDay;
+let foDay;
 
 let startDate;
 let prevDate;
-let sixDate;
+let foDate;
 
 let startTS;
 let curTS;
 let prevTS;
-let sixTS;
+let foTS;
 
 function setDates() {
   date = new Date();
@@ -61,12 +61,12 @@ function setDates() {
     prevDay = day - 1;
   };
 
-  if ((hour - 6 ) < 0) {
-    sixHrs = (hour - 6) + 24;
-    sixDay = prevDay;
+  if ((hour - 4 ) < 0) {
+    foHrs = (hour - 4) + 24;
+    foDay = prevDay;
   } else {
-    sixHrs = hour - 6;
-    sixDay = day;
+    foHrs = hour - 6;
+    foDay = day;
   };
 
   if (hour === 0) {
@@ -79,11 +79,11 @@ function setDates() {
 
   startDate = new Date(year, month, day, hour, 0, sec);
   prevDate = new Date(year, month, oneDay, prevHour, min, sec);
-  sixDate = new Date(year, month, sixDay, sixHrs, 0, sec );
+  foDate = new Date(year, month, foDay, foHrs, 0, sec );
   startTS = startDate.getTime();
   curTS = date.getTime();
   prevTS = prevDate.getTime();
-  sixTS = sixDate.getTime();
+  foTS = foDate.getTime();
 }
 
 setDates();
@@ -102,13 +102,11 @@ async function getCurVol(pair) {
 
 async function getAveVol(pair) {
   try {
-    const res = await fetch('https://api.binance.com/api/v3/klines?symbol=' + pair + '&interval=1h&startTime=' + sixTS + '&endTime=' + prevTS);
+    const res = await fetch('https://api.binance.com/api/v3/klines?symbol=' + pair + '&interval=1h&startTime=' + foTS + '&endTime=' + prevTS);
     const data = await res.json();
-    // const vol1 = parseFloat(data[0][5]);
-    // const vol2 = parseFloat(data[1][5]);
-    const vol1 = parseFloat(data[2][5]);
-    const vol2 = parseFloat(data[3][5]);
-    const vol3 = parseFloat(data[4][5]);
+    const vol1 = parseFloat(data[0][5]);
+    const vol2 = parseFloat(data[1][5]);
+    const vol3 = parseFloat(data[2][5]);
     const aveVol = ((vol1 + vol2 + vol3) / 3);
     return aveVol;
   } catch (error) {
