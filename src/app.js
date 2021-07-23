@@ -250,8 +250,8 @@ function displayBlankCoins() {
     if (coin.logs.length === 0) {
       logHtml = `
       <div class="expandbl">
-        <button id="${coin.name}X" class="expBtn">${coin.name}</button>
-        <div id="${coin.name}L" class="logs">
+        <button id="${coin.name}DropDown" class="expBtn">${coin.name}</button>
+        <div class="logs">
           <span class="logLbl">${coin.name}</span>
           <span id="${coin.name}Bell" class="fakeBtn hidden">
             <img class="bell" src="src/icons/bell.svg"/>
@@ -259,9 +259,9 @@ function displayBlankCoins() {
           </span>
           <div class="alertSetup">
             <span class="alertLbl">Alert when<a id="${coin.name}AlertType" style="margin-left: 4px;margin-right: 4px" href="javascript:void(0)">${coin.alert}</a>than $</span>
-            <input id="${coin.name}AP" class="priceAlert" type="text" name="interval" placeholder="TYPE IN PRICE" autocomplete="off">
-            <button id="${coin.name}SA" class="alBtn"><img class="check" src="src/icons/ok.svg"/></button>
-            <button id="${coin.name}RA" class="rmAlrt hidden"><img class="rmAl" src="src/icons/cancel.svg"/></button>
+            <input id="${coin.name}AlertInput" class="priceAlert" type="text" name="interval" placeholder="TYPE IN PRICE" autocomplete="off">
+            <button id="${coin.name}SetAlert" class="alBtn"><img class="check" src="src/icons/ok.svg"/></button>
+            <button id="${coin.name}RemoveAlert" class="rmAlrt hidden"><img class="rmAl" src="src/icons/cancel.svg"/></button>
           </div>
           <hr class="shr">
           <div id="${coin.name}Logs">
@@ -273,8 +273,8 @@ function displayBlankCoins() {
     } else {
       logHtml = `
       <div class="expandbl">
-        <button id="${coin.name}X" class="expBtn">${coin.name}</button>
-        <div id="${coin.name}L" class="logs">
+        <button id="${coin.name}DropDown" class="expBtn">${coin.name}</button>
+        <div class="logs">
           <span class="logLbl">${coin.name}</span>
           <span id="${coin.name}Bell" class="fakeBtn hidden">
             <img class="bell" src="src/icons/bell.svg"/>
@@ -282,9 +282,9 @@ function displayBlankCoins() {
           </span>
           <div class="alertSetup">
             <span class="alertLbl">Alert when<a id="${coin.name}AlertType" style="margin-left: 4px;margin-right: 4px" href="javascript:void(0)">${coin.alert}</a>than $</span>
-            <input id="${coin.name}AP" class="priceAlert" type="text" name="interval" placeholder="TYPE IN PRICE" autocomplete="off">
-            <button id="${coin.name}SA" class="alBtn"><img class="check" src="src/icons/ok.svg"/></button>
-            <button id="${coin.name}RA" class="rmAlrt hidden"><img class="rmAl" src="src/icons/cancel.svg"/></button>
+            <input id="${coin.name}AlertInput" class="priceAlert" type="text" name="interval" placeholder="TYPE IN PRICE" autocomplete="off">
+            <button id="${coin.name}SetAlert" class="alBtn"><img class="check" src="src/icons/ok.svg"/></button>
+            <button id="${coin.name}RemoveAlert" class="rmAlrt hidden"><img class="rmAl" src="src/icons/cancel.svg"/></button>
           </div>
           <hr class="shr">
           <div id="${coin.name}Logs">
@@ -296,11 +296,11 @@ function displayBlankCoins() {
 
     const coinHtml = `
       <div class="item">
-        <span id="${coin.name}N" class="pair">${coin.name}</span>
-        <span id="${coin.name}P" class="price">--</span>
-        <span id="${coin.name}DP" class="dP">--</span>
-        <span id="${coin.name}PP" class="priceP">--</span>
-        <span id="${coin.name}V" class="vol">-- | --</span>
+        <span id="${coin.name}Name" class="pair">${coin.name}</span>
+        <span id="${coin.name}Price" class="price">--</span>
+        <span id="${coin.name}DailyPercent" class="dP">--</span>
+        <span id="${coin.name}PricePercent" class="priceP">--</span>
+        <span id="${coin.name}Vol" class="vol">-- | --</span>
         <button id="${coin.name}" class="xBtn" type="submit" name="remove">X</button>
       </div>
     `;
@@ -345,25 +345,25 @@ function displayBlankCoins() {
       }
     });
 
-    document.querySelector(`#${coin.name}SA`).addEventListener('click', function() {
-      let userInput = document.querySelector(`#${coin.name}AP`).value;
+    document.querySelector(`#${coin.name}SetAlert`).addEventListener('click', function() {
+      let userInput = document.querySelector(`#${coin.name}AlertInput`).value;
       let alertPrice = parseFloat(userInput);
       coin.alertPrice = alertPrice;
-      document.querySelector(`#${coin.name}AP`).value = '';
-      document.querySelector(`#${coin.name}RA`).classList.remove('hidden');
+      document.querySelector(`#${coin.name}AlertInput`).value = '';
+      document.querySelector(`#${coin.name}RemoveAlert`).classList.remove('hidden');
       document.querySelector(`#${coin.name}AlertTool`).innerHTML = `Alert set at: $${alertPrice}`;
       document.querySelector(`#${coin.name}Bell`).classList.remove('hidden');
     });
 
-    document.querySelector(`#${coin.name}RA`).addEventListener('click', function() {
+    document.querySelector(`#${coin.name}RemoveAlert`).addEventListener('click', function() {
       coin.alertPrice = 0;
-      document.querySelector(`#${coin.name}RA`).classList.add('hidden');
+      document.querySelector(`#${coin.name}RemoveAlert`).classList.add('hidden');
       document.querySelector(`#${coin.name}Bell`).classList.add('hidden');
     });
 
-    document.querySelector(`#${coin.name}AP`).addEventListener('keydown', function(event) {
+    document.querySelector(`#${coin.name}AlertInput`).addEventListener('keydown', function(event) {
       if (event.key === "Enter") {
-        document.querySelector(`#${coin.name}SA`).click();
+        document.querySelector(`#${coin.name}SetAlert`).click();
       }
     });
   });
@@ -380,19 +380,19 @@ async function initData() {
     const dayPricePercent = convertedData.toFixed(2);
 
     if (dayPricePercent > 0) {
-      document.querySelector(`#${coin.name}DP`).style.color = '#05b114';
-      document.querySelector(`#${coin.name}DP`).innerHTML = `+${dayPricePercent}%`;
+      document.querySelector(`#${coin.name}DailyPercent`).style.color = '#05b114';
+      document.querySelector(`#${coin.name}DailyPercent`).innerHTML = `+${dayPricePercent}%`;
     } else {
-      document.querySelector(`#${coin.name}DP`).style.color = '#d2121a';
-      document.querySelector(`#${coin.name}DP`).innerHTML = `${dayPricePercent}%`;
+      document.querySelector(`#${coin.name}DailyPercent`).style.color = '#d2121a';
+      document.querySelector(`#${coin.name}DailyPercent`).innerHTML = `${dayPricePercent}%`;
     };
 
     const aveVol = await getAveVol(coin.name);
     const aveVolMin = aveVol / 60;
     coin.aVm = aveVolMin.toFixed();
 
-    document.querySelector(`#${coin.name}P`).innerHTML = coin.curPrice;
-    document.querySelector(`#${coin.name}V`).innerHTML = `xxxxxx/min | ${coin.aVm}/min`;
+    document.querySelector(`#${coin.name}Price`).innerHTML = coin.curPrice;
+    document.querySelector(`#${coin.name}Vol`).innerHTML = `xxxxxx/min | ${coin.aVm}/min`;
   });
 }
 
@@ -415,14 +415,14 @@ async function displayTickData() {
     const convertedData = parseFloat(dayPercentData);
     const dayPricePercent = convertedData.toFixed(2);
     
-    document.querySelector(`#${coin.name}P`).innerHTML = price;
+    document.querySelector(`#${coin.name}Price`).innerHTML = price;
 
     if (dayPricePercent > 0) {
-      document.querySelector(`#${coin.name}DP`).style.color = '#05b114';
-      document.querySelector(`#${coin.name}DP`).innerHTML = `+${dayPricePercent}%`;
+      document.querySelector(`#${coin.name}DailyPercent`).style.color = '#05b114';
+      document.querySelector(`#${coin.name}DailyPercent`).innerHTML = `+${dayPricePercent}%`;
     } else {
-      document.querySelector(`#${coin.name}DP`).style.color = '#d2121a';
-      document.querySelector(`#${coin.name}DP`).innerHTML = `${dayPricePercent}%`;
+      document.querySelector(`#${coin.name}DailyPercent`).style.color = '#d2121a';
+      document.querySelector(`#${coin.name}DailyPercent`).innerHTML = `${dayPricePercent}%`;
     };
 
     const floatPrice = parseFloat(price);
@@ -431,7 +431,7 @@ async function displayTickData() {
         if (floatPrice >= coin.alertPrice) {
           priceSound.play();
           document.querySelector('#noteDrop').classList.add('pulsing');
-          document.querySelector(`#${coin.name}X`).classList.add('pulsing');
+          document.querySelector(`#${coin.name}DropDown`).classList.add('pulsing');
           if (min < 10) {
               coin.logs.unshift(`Alert price hit! $${price} at ${hour}:0${min}`);
           } else {
@@ -446,14 +446,14 @@ async function displayTickData() {
             document.querySelector(`#${coin.name}Logs`).insertAdjacentHTML('beforeend', html);
           });
           coin.alertPrice = 0;
-          document.querySelector(`#${coin.name}RA`).classList.add('hidden');
+          document.querySelector(`#${coin.name}RemoveAlert`).classList.add('hidden');
           document.querySelector(`#${coin.name}Bell`).classList.add('hidden');
         }
       } else {
         if (floatPrice <= coin.alertPrice) {
           priceSound.play();
           document.querySelector('#noteDrop').classList.add('pulsing');
-          document.querySelector(`#${coin.name}X`).classList.add('pulsing');
+          document.querySelector(`#${coin.name}DropDown`).classList.add('pulsing');
           if (min < 10) {
               coin.logs.unshift(`Alert price hit! $${price} at ${hour}:0${min}`);
           } else {
@@ -468,7 +468,7 @@ async function displayTickData() {
             document.querySelector(`#${coin.name}Logs`).insertAdjacentHTML('beforeend', html);
           });
           coin.alertPrice = 0;
-          document.querySelector(`#${coin.name}RA`).classList.add('hidden');
+          document.querySelector(`#${coin.name}RemoveAlert`).classList.add('hidden');
           document.querySelector(`#${coin.name}Bell`).classList.add('hidden');
         }
       }
@@ -481,11 +481,11 @@ async function displayIntData() {
     coin.lastPrice = coin.curPrice;
     coin.lastVol = coin.curVol;
 
-    if (document.querySelector(`#${coin.name}V`).classList.contains('hot')) {
-      document.querySelector(`#${coin.name}V`).classList.remove('hot');
+    if (document.querySelector(`#${coin.name}Vol`).classList.contains('hot')) {
+      document.querySelector(`#${coin.name}Vol`).classList.remove('hot');
     }
-    if (document.querySelector(`#${coin.name}N`).classList.contains('hot')) {
-      document.querySelector(`#${coin.name}N`).classList.remove('hot');
+    if (document.querySelector(`#${coin.name}Name`).classList.contains('hot')) {
+      document.querySelector(`#${coin.name}Name`).classList.remove('hot');
     }
 
     const priceData = await getPrice(coin.name);
@@ -517,7 +517,7 @@ async function displayIntData() {
 
     if (volPerMinRate >= alertPoint && sounds === true) {
       alertSound.play();
-      document.querySelector(`#${coin.name}V`).classList.add('hot');
+      document.querySelector(`#${coin.name}Vol`).classList.add('hot');
 
       if (interval === 1) {
         coin.oneTicks.push(1);
@@ -527,7 +527,7 @@ async function displayIntData() {
           const total = coin.oneTicks.reduce((a, b) => a + b, 0);
 
           if (total >= 7) {
-            document.querySelector(`#${coin.name}N`).classList.add('hot');
+            document.querySelector(`#${coin.name}Name`).classList.add('hot');
             hotSound.play();
           }
         }
@@ -539,7 +539,7 @@ async function displayIntData() {
           const total = coin.fiveTicks.reduce((a, b) => a + b, 0);
 
           if (total >= 2) {
-            document.querySelector(`#${coin.name}N`).classList.add('hot');
+            document.querySelector(`#${coin.name}Name`).classList.add('hot');
             hotSound.play();
           }
         }
@@ -564,10 +564,10 @@ async function displayIntData() {
       }
 
       document.querySelector('#noteDrop').classList.add('pulsing');
-      document.querySelector(`#${coin.name}X`).classList.add('pulsing');
+      document.querySelector(`#${coin.name}DropDown`).classList.add('pulsing');
 
     } else if (volPerMinRate >= alertPoint && sounds === false) {
-      document.querySelector(`#${coin.name}V`).classList.add('hot');
+      document.querySelector(`#${coin.name}Vol`).classList.add('hot');
 
       if (interval === 1) {
         coin.oneTicks.push(1);
@@ -577,7 +577,7 @@ async function displayIntData() {
           const total = coin.oneTicks.reduce((a, b) => a + b, 0);
 
           if (total >= 7) {
-            document.querySelector(`#${coin.name}N`).classList.add('hot');
+            document.querySelector(`#${coin.name}Name`).classList.add('hot');
           }
         }
       } else if (interval === 5) {
@@ -588,7 +588,7 @@ async function displayIntData() {
           const total = coin.fiveTicks.reduce((a, b) => a + b, 0);
 
           if (total >= 2) {
-            document.querySelector(`#${coin.name}N`).classList.add('hot');
+            document.querySelector(`#${coin.name}Name`).classList.add('hot');
           }
         }
       }
@@ -612,17 +612,17 @@ async function displayIntData() {
       }
 
       document.querySelector('#noteDrop').classList.add('pulsing');
-      document.querySelector(`#${coin.name}X`).classList.add('pulsing');
+      document.querySelector(`#${coin.name}DropDown`).classList.add('pulsing');
     };
 
-    document.querySelector(`#${coin.name}V`).innerHTML = `${volPerMinute}/min | ${coin.aVm}/min`;
+    document.querySelector(`#${coin.name}Vol`).innerHTML = `${volPerMinute}/min | ${coin.aVm}/min`;
 
     if (priceDifference > 0) {
-      document.querySelector(`#${coin.name}PP`).style.color = '#05b114';
-      document.querySelector(`#${coin.name}PP`).innerHTML = `+${priceDifference}%`;
+      document.querySelector(`#${coin.name}PricePercent`).style.color = '#05b114';
+      document.querySelector(`#${coin.name}PricePercent`).innerHTML = `+${priceDifference}%`;
     } else {
-      document.querySelector(`#${coin.name}PP`).style.color = '#d2121a';
-      document.querySelector(`#${coin.name}PP`).innerHTML = `${priceDifference}%`;
+      document.querySelector(`#${coin.name}PricePercent`).style.color = '#d2121a';
+      document.querySelector(`#${coin.name}PricePercent`).innerHTML = `${priceDifference}%`;
     };
 
     if (coin.logs.length === 0) {
