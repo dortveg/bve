@@ -17,10 +17,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-/*
-make mobile friendly???
-*/
-
 ///////////Time/date stuff//////////////
 
 let date;
@@ -479,11 +475,11 @@ async function displayIntData() {
     coin.lastPrice = coin.curPrice;
     coin.lastVol = coin.curVol;
 
-    if (document.querySelector(`#${coin.name}Vol`).classList.contains('hot')) {
-      document.querySelector(`#${coin.name}Vol`).classList.remove('hot');
+    if (document.querySelector(`#${coin.name}Vol`).classList.contains('hotVol')) {
+      document.querySelector(`#${coin.name}Vol`).classList.remove('hotVol');
     }
-    if (document.querySelector(`#${coin.name}Name`).classList.contains('hot')) {
-      document.querySelector(`#${coin.name}Name`).classList.remove('hot');
+    if (document.querySelector(`#${coin.name}Name`).classList.contains('hotName')) {
+      document.querySelector(`#${coin.name}Name`).classList.remove('hotName');
     }
 
     const priceData = await getPrice(coin.name);
@@ -515,7 +511,7 @@ async function displayIntData() {
 
     if (volPerMinRate >= alertPoint && sounds === true) {
       alertSound.play();
-      document.querySelector(`#${coin.name}Vol`).classList.add('hot');
+      document.querySelector(`#${coin.name}Vol`).classList.add('hotVol');
 
       if (interval === 1) {
         coin.oneTicks.push(1);
@@ -525,7 +521,7 @@ async function displayIntData() {
           const total = coin.oneTicks.reduce((a, b) => a + b, 0);
 
           if (total >= 7) {
-            document.querySelector(`#${coin.name}Name`).classList.add('hot');
+            document.querySelector(`#${coin.name}Name`).classList.add('hotName');
             hotSound.play();
           }
         }
@@ -537,7 +533,7 @@ async function displayIntData() {
           const total = coin.fiveTicks.reduce((a, b) => a + b, 0);
 
           if (total >= 2) {
-            document.querySelector(`#${coin.name}Name`).classList.add('hot');
+            document.querySelector(`#${coin.name}Name`).classList.add('hotName');
             hotSound.play();
           }
         }
@@ -565,7 +561,7 @@ async function displayIntData() {
       document.querySelector(`#${coin.name}DropDown`).classList.add('pulsing');
 
     } else if (volPerMinRate >= alertPoint && sounds === false) {
-      document.querySelector(`#${coin.name}Vol`).classList.add('hot');
+      document.querySelector(`#${coin.name}Vol`).classList.add('hotVol');
 
       if (interval === 1) {
         coin.oneTicks.push(1);
@@ -575,7 +571,7 @@ async function displayIntData() {
           const total = coin.oneTicks.reduce((a, b) => a + b, 0);
 
           if (total >= 7) {
-            document.querySelector(`#${coin.name}Name`).classList.add('hot');
+            document.querySelector(`#${coin.name}Name`).classList.add('hotName');
           }
         }
       } else if (interval === 5) {
@@ -586,7 +582,7 @@ async function displayIntData() {
           const total = coin.fiveTicks.reduce((a, b) => a + b, 0);
 
           if (total >= 2) {
-            document.querySelector(`#${coin.name}Name`).classList.add('hot');
+            document.querySelector(`#${coin.name}Name`).classList.add('hotName');
           }
         }
       }

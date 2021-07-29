@@ -64,8 +64,15 @@ body {
   color: grey;
 }
 
-.hot {
+.hotVol {
   background: linear-gradient(to right, #e49039 48%, #2a3347 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hotName {
+  background: #e49039;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
