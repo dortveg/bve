@@ -478,8 +478,8 @@ async function displayIntData() {
     if (document.querySelector(`#${coin.name}Vol`).classList.contains('hotVol')) {
       document.querySelector(`#${coin.name}Vol`).classList.remove('hotVol');
     }
-    if (document.querySelector(`#${coin.name}Name`).classList.contains('hotName')) {
-      document.querySelector(`#${coin.name}Name`).classList.remove('hotName');
+    if (document.querySelector(`#${coin.name}Name`).classList.contains('hotCoin')) {
+      document.querySelector(`#${coin.name}Name`).classList.remove('hotCoin');
     }
 
     const priceData = await getPrice(coin.name);
@@ -521,7 +521,7 @@ async function displayIntData() {
           const total = coin.oneTicks.reduce((a, b) => a + b, 0);
 
           if (total >= 7) {
-            document.querySelector(`#${coin.name}Name`).classList.add('hotName');
+            document.querySelector(`#${coin.name}Name`).classList.add('hotCoin');
             hotSound.play();
           }
         }
@@ -533,7 +533,7 @@ async function displayIntData() {
           const total = coin.fiveTicks.reduce((a, b) => a + b, 0);
 
           if (total >= 2) {
-            document.querySelector(`#${coin.name}Name`).classList.add('hotName');
+            document.querySelector(`#${coin.name}Name`).classList.add('hotCoin');
             hotSound.play();
           }
         }
@@ -571,7 +571,7 @@ async function displayIntData() {
           const total = coin.oneTicks.reduce((a, b) => a + b, 0);
 
           if (total >= 7) {
-            document.querySelector(`#${coin.name}Name`).classList.add('hotName');
+            document.querySelector(`#${coin.name}Name`).classList.add('hotCoin');
           }
         }
       } else if (interval === 5) {
@@ -582,7 +582,7 @@ async function displayIntData() {
           const total = coin.fiveTicks.reduce((a, b) => a + b, 0);
 
           if (total >= 2) {
-            document.querySelector(`#${coin.name}Name`).classList.add('hotName');
+            document.querySelector(`#${coin.name}Name`).classList.add('hotCoin');
           }
         }
       }
