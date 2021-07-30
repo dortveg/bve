@@ -160,7 +160,7 @@ h1 {
   font-weight: bold;
   margin-left: 0;
   padding: 0px 0px 0px 2px;
-  width: 7rem;
+  width: 7.2rem;
   min-height: 2rem;
 }
 
@@ -207,8 +207,6 @@ hr {
   border-top-right-radius: 5px;
   padding-top: 0;
   padding-bottom: .5rem;
-  /* font-family: 'Typori';
-  font-size: 1.15rem; */
 }
 
 .phold {
@@ -231,10 +229,8 @@ hr {
   border-top-left-radius: 5px;
   padding-top: .75rem;
   padding-bottom: .5rem;
-  margin-left: .2rem;
   margin-top: -1.65rem;
   font-family: 'Sax';
-  /* font-size: 1.15rem; */
 }
 
 .logLbl {
@@ -319,18 +315,12 @@ hr {
 
 .priceAlert {
   padding-bottom: 2px;
-  /* padding-top: 2px; */
   text-align: center;
   width: 4.5rem;
   margin-right: .4rem;
   border: none;
   border-radius: 5px;
-  /* margin-bottom: 2px; */
 }
-
-/* .fakeBtn {
-  margin-left: 2px;
-} */
 
 .bell {
   width: 15px;
