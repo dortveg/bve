@@ -695,19 +695,86 @@ p {
 footer {
   background-color: #3B3A45;
   text-align: center;
-  padding-top: .5rem;
-  padding-bottom: .5rem;
+  padding-top: .3rem;
+  padding-bottom: .7rem;
+  margin-top: 2.7rem;
   border-top-left-radius: 9px;
   border-top-right-radius: 9px;
   font-family: 'Typori';
 }
 
+.sig {
+  padding-top: .5rem;
+  margin-right: .5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.disclaimer {
+  font-size: 1rem;
+  color: #131420;
+  padding-bottom: 0;
+  padding-top: .8rem;
+}
+
+.expandDonate {
+  position: relative;
+  display: inline-block;
+  width: 5rem;
+  margin-right: 2px;
+}
+
+.expandDonate:hover .donateInfo {
+  display: inline-block;
+}
+
+.donateBtn {
+  color: #212444;
+  font-size: 1rem;
+  font-family: 'Typori';
+  width: 5rem;
+  min-height: 2rem;
+  margin-left: 0;
+  margin-top: 1px;
+  padding: 0;
+}
+
+.donateInfo {
+  display: none;
+  position: absolute;
+  background-color: #303a52;
+  color: #f3ecce;
+  width: 43rem;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  padding-top: .75rem;
+  padding-bottom: 1rem;
+  margin-top: -5.2rem;
+  font-family: 'Typori';
+}
+
+.plea {
+  font-size: .95rem;
+}
+
+h6 {
+  margin: 4px 0 0 0;
+  font-family: 'Sax';
+  font-size: .75rem;
+}
+
 .copyright { 
   color: grey;
+  font-size: 1.1rem;
 }
 
 .link:link, .link:visited {
-  color: #131420;
+  color: #212444;
   background-color: transparent;
   text-decoration: none;
 }
