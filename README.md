@@ -10,5 +10,5 @@ Whenever the current volume flow is higher than the average volume flow by your 
 \
 Currently it receives the price and volume data from Binance.com only. 
 
-## Licence
+## License
 [GNU AGPL](https://choosealicense.com/licenses/agpl-3.0/)

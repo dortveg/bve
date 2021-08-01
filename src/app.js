@@ -342,11 +342,16 @@ function displayBlankCoins() {
     document.querySelector(`#${coin.name}SetAlert`).addEventListener('click', function() {
       let userInput = document.querySelector(`#${coin.name}AlertInput`).value;
       let alertPrice = parseFloat(userInput);
-      coin.alertPrice = alertPrice;
-      document.querySelector(`#${coin.name}AlertInput`).value = '';
-      document.querySelector(`#${coin.name}RemoveAlert`).classList.remove('hidden');
-      document.querySelector(`#${coin.name}AlertTool`).innerHTML = `Alert set at: $${alertPrice}`;
-      document.querySelector(`#${coin.name}Bell`).classList.remove('hidden');
+      
+      if (isNaN(alertPrice)) {
+        alert('Please enter a valid number.');
+      } else {
+        coin.alertPrice = alertPrice;
+        document.querySelector(`#${coin.name}AlertInput`).value = '';
+        document.querySelector(`#${coin.name}RemoveAlert`).classList.remove('hidden');
+        document.querySelector(`#${coin.name}AlertTool`).innerHTML = `Alert set at: $${alertPrice}`;
+        document.querySelector(`#${coin.name}Bell`).classList.remove('hidden');
+      }
     });
 
     document.querySelector(`#${coin.name}RemoveAlert`).addEventListener('click', function() {
@@ -641,7 +646,7 @@ document.querySelector('.add').addEventListener('click', function() {
   document.querySelector('.coinInput').value = '';
 
   if (document.querySelector(`#${pairing}`)) {
-    alert('This pair was already added');
+    alert('This pair was already added.');
   } else {
     fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${pairing}`).then(function(res) {
     addCoin(pairing);
