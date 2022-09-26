@@ -1,0 +1,20 @@
+{
+  "name": "bve",
+  "version": "1.0.0",
+  "description": "Cryptocurrency price and volume tracker.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dortveg/bve.git"
+  },
+  "author": "George Tevdo",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/dortveg/bve/issues"
+  },
+  "homepage": "https://github.com/dortveg/bve#readme"
+}
